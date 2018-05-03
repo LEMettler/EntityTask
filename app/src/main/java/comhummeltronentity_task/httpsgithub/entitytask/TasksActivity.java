@@ -17,15 +17,18 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 public class TasksActivity extends AppCompatActivity {
-
     /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
+     * Das Ist die Activity die die Übersicht über die einzelnen bereits erzeugten Tasks anzeigt
+     * Über den kleinen button (fap) kommt man zum taskcreator
+     *
+     * TODO tasks anzeigen
+     * TODO tasks löschen/erledigen
      */
+
+
+
+
+
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
     /**
@@ -45,7 +48,7 @@ public class TasksActivity extends AppCompatActivity {
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -149,3 +152,11 @@ public class TasksActivity extends AppCompatActivity {
         }
     }
 }
+ /*
+     * The {@link android.support.v4.view.PagerAdapter} that will provide
+     * fragments for each of the sections. We use a
+     * {@link FragmentPagerAdapter} derivative, which will keep every
+     * loaded fragment in memory. If this becomes too memory intensive, it
+     * may be best to switch to a
+     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
+     */
