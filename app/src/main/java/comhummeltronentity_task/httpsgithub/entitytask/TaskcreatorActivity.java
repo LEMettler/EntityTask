@@ -14,11 +14,20 @@ import java.util.ArrayList;
 * Hier werden die einzelnen Tasks erzeugt
  * TODO tasks löschen/back
  * TODO input-pretexte löschen bei touch
+ * TODO reminderfunktion in tasks einbauen, ist ne seperate geschichte, wird über solche push notifications geregelt
+ * (siehe https://www.youtube.com/watch?v=SWsuijO5NGE)
+ *
  *
  * vorallem:
  * TODO finde eine passende auswahlmöglichkeit für weekly
  * TODO datum/datums auslesen und in richtiger form an jeweilige subtasks übergeben
 *
+ *
+ *
+ * für die custom und motnhly auswahl gibt es ne sache die heist datepicker, ist n popup ding von google mit einfacher tagesausauswahl
+ * für weekly gäbe es die möglichkeit einzelner felder für die einzelnen tage, deren darstellung ist die frage
+ *
+ *
 * */
 
 
