@@ -1,14 +1,20 @@
 <resources>
     <string name="app_name">EntityTask</string>
-    <string name="txtKalender">Kalender</string>
+    <string name="txtKalender">Calendar</string>
     <string name="txtTasks">Tasks</string>
     <string name="title_activity_tasks">TasksActivity</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
-    <string name="btnHeuteAnstehend">Heute anstehend</string>
-    <string name="txtSpeichern">Speichern</string>
-    <string name="txtLoeschen">Löschen</string>
-    <string name="txtTitel">Titel</string>
-    <string name="txtBeschreibung">Beschreibung</string>
+    <string name="btnHeuteAnstehend">Today</string>
+    <string name="txtSpeichern">Save</string>
+    <string name="txtLoeschen">Delete</string>
+    <string name="txtTitel">Title</string>
+    <string name="txtBeschreibung">Description</string>
     <string name="textview">TextView</string>
+    <string name="rbtnCustom">Custom</string>
+    <string name="rbtnMonthly">Monthly</string>
+    <string name="rbtnWeekly">Weekly</string>
+    <string name="txtReminder">Reminder</string>
+    <string name="btnTime">Time</string>
+    <string name="btnDate">Date</string>
 </resources>

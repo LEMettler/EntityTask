@@ -1,21 +1,25 @@
 package comhummeltronentity_task.httpsgithub.entitytask;
 
+import java.time.LocalTime;
+
 /**
  * Created by Meerlu on 03.05.2018.
  */
 
-public class Task {
+public abstract class Task {
     /**
      * Klasse zum Speichern einzelner Tasks, deren objekte dann gespeichert werden können
      * TODO tasks im system speichern
      */
-    private String title;
-    private String description;
+    protected String title;
+    protected String description;
+    protected LocalTime time;
 
     //Wenn der Button zum Speichern gedrückt wird wird das Objekt erzeugt und die Atrribute übern constructor übergeben
-    public Task(String title, String description) {
+    public Task(String title, String description, LocalTime time) {
         this.title = title;
         this.description = description;
+        this.time = time;
     }
 
     //Getter & Setter
@@ -33,5 +37,13 @@ public class Task {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public LocalTime getTime() {
+        return time;
+    }
+
+    public void setTime(LocalTime time) {
+        this.time = time;
     }
 }
