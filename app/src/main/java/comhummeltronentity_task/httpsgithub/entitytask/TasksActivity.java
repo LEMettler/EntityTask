@@ -26,6 +26,12 @@ public class TasksActivity extends AppCompatActivity {
      */
 
 
+    //da die taskactivity über allen  tasks, die erzeugt werden steht, sollen hier erstmal alle tasks gespeichert werden
+    //das ganze ist public, damit wir uns späteren setter/getter kram zumindest vorzeitig sparen können
+
+    //(@kay, je nachdem, wie du die tasks speichert ist das hier nur provisorisch)
+
+    //private ArrayList<Task> tasks = new ArrayList<>();
 
 
 
@@ -54,10 +60,7 @@ public class TasksActivity extends AppCompatActivity {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {/*                //Standartmeldung                     //Der kleine Kreis in der Ecke ruft den Taskcreator auf
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();*/
-
+            public void onClick(View view) {
                 gotoTaskcreator(view);
             }
         });
@@ -65,7 +68,9 @@ public class TasksActivity extends AppCompatActivity {
     }
 
     //Link zu TaskActivity
+    //hier  gibt es den rückgabewert aus taskcreator (der neue task leude), deshalb ist hier alles mega weird und kompliziert mit weirden intent gedöns und so
     public void gotoTaskcreator(View view){
+
         Intent intent = new Intent(this, TaskcreatorActivity.class);
         startActivity(intent);
     }
@@ -119,11 +124,11 @@ public class TasksActivity extends AppCompatActivity {
         }
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,                      //onCreateView des fragment
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_tasks, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+            View rootView = inflater.inflate(R.layout.fragment_tasks, container, false);    //TODO anzeigen der dates
+            TextView section_label = (TextView) rootView.findViewById(R.id.section_label);
+            section_label.setText( "Task " + getArguments().getInt(ARG_SECTION_NUMBER));
             return rootView;
         }
     }
@@ -147,7 +152,8 @@ public class TasksActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
+            // wieviele seiten == anzahl der existierenden tasks
+
             return 3;
         }
     }

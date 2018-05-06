@@ -8,6 +8,7 @@ import android.view.View;
 
 /**
 * In diesem Fenster startet die App
+ * und man hat die auswahl nach der designvorlage zu kalender oder tasks zu gehen
 * */
 
 public class MainActivity extends AppCompatActivity {

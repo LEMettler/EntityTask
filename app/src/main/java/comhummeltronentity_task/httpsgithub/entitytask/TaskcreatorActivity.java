@@ -46,6 +46,9 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
 
     private ArrayList<Task> tasks = new ArrayList<>();
 
+    //Referenz zu Main
+    private MainActivity mainActivity;
+
     //Attribute für GUI
     private RadioButton rbtnCustom;
     private RadioButton rbtnMonthly;
@@ -203,6 +206,8 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
 
         }
     }
+
+    public void btnDeleteHandler(View v){}
 
     //Getter
     public ArrayList<Task> getTasks() {
