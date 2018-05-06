@@ -19,8 +19,8 @@ public class TaskCustom extends Task {
 
     private ArrayList<LocalDate> dates = new ArrayList<>();
 
-    public TaskCustom(String title, String description, LocalTime time, ArrayList<LocalDate> dates) {
-        super(title, description, time);
+    public TaskCustom(String title, String description, Boolean reminder, LocalTime time, ArrayList<LocalDate> dates) {
+        super(title, description, reminder, time);
 
         this.dates = dates;
     }

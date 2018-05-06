@@ -15,6 +15,10 @@
     <string name="rbtnMonthly">Monthly</string>
     <string name="rbtnWeekly">Weekly</string>
     <string name="txtReminder">Reminder</string>
-    <string name="btnTime">Time</string>
+    <string name="btnPick">Pick</string>
     <string name="btnDate">Date</string>
+    <string name="txtTimeSpacer">-</string>
+    <string name="txtDateSpacer">-</string>
+    <string name="txtDates">Date</string>
+    <string name="txtTimes">Time</string>
 </resources>

@@ -18,8 +18,8 @@ public class TaskMonthly extends Task {
      */
     private ArrayList<LocalDate> dates = new ArrayList<>();
 
-    public TaskMonthly(String title, String description, LocalTime time, ArrayList<LocalDate> dates) {
-        super(title, description, time);
+    public TaskMonthly(String title, String description, Boolean reminder, LocalTime time, ArrayList<LocalDate> dates) {
+        super(title, description, reminder, time);
 
         this.dates = dates;
     }

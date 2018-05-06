@@ -14,11 +14,13 @@ public abstract class Task {
     protected String title;
     protected String description;
     protected LocalTime time;
+    protected Boolean reminder;
 
     //Wenn der Button zum Speichern gedrückt wird wird das Objekt erzeugt und die Atrribute übern constructor übergeben
-    public Task(String title, String description, LocalTime time) {
+    public Task(String title, String description, Boolean reminder, LocalTime time) {
         this.title = title;
         this.description = description;
+        this.reminder = reminder;
         this.time = time;
     }
 
@@ -45,5 +47,13 @@ public abstract class Task {
 
     public void setTime(LocalTime time) {
         this.time = time;
+    }
+
+    public Boolean getReminder() {
+        return reminder;
+    }
+
+    public void setReminder(Boolean reminder) {
+        this.reminder = reminder;
     }
 }
