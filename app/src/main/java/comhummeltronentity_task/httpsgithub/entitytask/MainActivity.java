@@ -13,15 +13,20 @@ import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
 
+    private TaskStorage taskStorage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        taskStorage = new TaskStorage();
     }
 
     //Link zu TaskActivity
     public void gotoTasks(View view){
         Intent intent = new Intent(this, TasksActivity.class);
+        intent.putExtra("TASKSTORAGE", taskStorage);    //Übergeben des Storage über Intent
         startActivity(intent);
     }
 

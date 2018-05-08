@@ -6,7 +6,7 @@ import java.time.LocalTime;
  * Created by Meerlu on 03.05.2018.
  */
 
-public abstract class Task {
+public abstract class Task{
     /**
      * Klasse zum Speichern einzelner Tasks, deren objekte dann gespeichert werden können
      * TODO tasks im system speichern
@@ -23,6 +23,7 @@ public abstract class Task {
         this.reminder = reminder;
         this.time = time;
     }
+
 
     //Getter & Setter
     public String getTitle() {

@@ -44,10 +44,7 @@ import java.util.Calendar;
 
 public class TaskcreatorActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
-    private ArrayList<Task> tasks = new ArrayList<>();
-
-    //Referenz zu Main
-    private MainActivity mainActivity;
+    private TaskStorage taskStorage;
 
     //Attribute für GUI
     private RadioButton rbtnCustom;
@@ -77,6 +74,8 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
         switchReminder = findViewById(R.id.switchReminder);
         txtInputDate = findViewById(R.id.txtInputDate);
         txtInputTime = findViewById(R.id.txtInputTime);
+
+        taskStorage = getIntent().getParcelableExtra("TASKSTORAGE");
     }
 
     //Handler der Radiobutton -> Anzeige der Time/Date picker
@@ -172,6 +171,10 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
     //Erzeugung der Taskobjekte
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void addTask(View v){
+
+        //zum Übergeben des TaskObjekts
+      //  Intent returnTask = new Intent((Intent) null);
+
         EditText inputTitle = findViewById(R.id.inputTitle);
         EditText inputDescription = findViewById(R.id.inputDescription);
 
@@ -188,7 +191,8 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
             LocalTime timeFormat = LocalTime.parse(inputTime);
 
             TaskCustom newtask = new TaskCustom(title, description, reminder, timeFormat, datesFormat);
-            tasks.add(newtask);
+          //  returnTask.putExtra("TASK", newtask);
+            taskStorage.addTask(newtask);
 
             //MonthlyTask
         }else if (rbtnMonthly.isChecked()) {
@@ -199,18 +203,20 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
             LocalTime timeFormat = LocalTime.parse(inputTime);
 
             TaskMonthly newtask = new TaskMonthly(title, description, reminder, timeFormat, datesFormat);
-            tasks.add(newtask);
+          //  returnTask.putExtra("TASK", newtask);
+            taskStorage.addTask(newtask);
 
             //WeeklyTask                        //TODO weekly tasks erstellen
         }else{
 
         }
+
+
+        //Rückgabe Teil2 "The grant finale"
+       // setResult(1, returnTask);
+        //finish();
     }
 
     public void btnDeleteHandler(View v){}
 
-    //Getter
-    public ArrayList<Task> getTasks() {
-        return tasks;
-    }
 }

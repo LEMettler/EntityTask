@@ -31,7 +31,7 @@ public class TasksActivity extends AppCompatActivity {
 
     //(@kay, je nachdem, wie du die tasks speichert ist das hier nur provisorisch)
 
-    //private ArrayList<Task> tasks = new ArrayList<>();
+    private TaskStorage taskStorage;
 
 
 
@@ -57,6 +57,10 @@ public class TasksActivity extends AppCompatActivity {
         mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
+
+        taskStorage = getIntent().getParcelableExtra("TASKSTORAGE");
+
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,8 +76,23 @@ public class TasksActivity extends AppCompatActivity {
     public void gotoTaskcreator(View view){
 
         Intent intent = new Intent(this, TaskcreatorActivity.class);
+        intent.putExtra("TASKSTORAGE",taskStorage);
         startActivity(intent);
+        //startActivityForResult(intent,1); //1 == successful
     }
+
+    //automatisch ausgeführt, wenn task erstellt wurde -> speichert task auf liste
+    /*@Override
+    protected void onActivityResult (int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1){
+            //tasks.add((TaskCustom) data.getExtras().getSerializable("TASK"));       //todo problem
+        }
+    }
+
+
+    private void startActivityForResult(Intent intent) {
+
+    }*/
 
 
     @Override
