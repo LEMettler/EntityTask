@@ -11,18 +11,20 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 
 /**
- * istn experiment
- * davon wird ein Objekt erstellt, auf welches der Taskcreator als auch die Taskanzeige zugriff haben
+ * Ein Objekt dieser Klasse wird in Main erzeugt, und daraufhin jeder neuen Activitiy übergegeben
+ * alle Activities mit Zugriff, können dadurch also -Tasks abrufen  -Tasks hinzufügen
+ *
  */
-public class TaskStorage implements Parcelable{
-
+public class TaskStorage implements Parcelable{  
+    //Hier liegen alle Tasks
     private ArrayList<Task> tasks;
 
     public TaskStorage(){
         tasks = new ArrayList<>();
     }
 
-
+    //****************************************************************************************************
+    //Parcelable-Methoden, benötigt um Objekte zwischen Aktivites zu übergeben 
     public TaskStorage(Parcel in) {
         readFromParcel(in);
     }
@@ -52,9 +54,9 @@ public class TaskStorage implements Parcelable{
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeList(tasks);
     }
-
-
-
+    //***********************************************************************************************
+    
+    //Access für die Activities
     public ArrayList<Task> getTasks() {
         return tasks;
     }
@@ -67,7 +69,4 @@ public class TaskStorage implements Parcelable{
         tasks.add(task);
         System.out.println("y");
     }
-
-
-
 }
