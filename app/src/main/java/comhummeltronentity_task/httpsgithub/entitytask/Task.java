@@ -8,7 +8,7 @@ import java.time.LocalTime;
 
 public abstract class Task{
     /**
-     * Klasse zum Speichern einzelner Tasks, deren objekte dann gespeichert werden können
+     * Blueprint für alle spezifischen Tasks
      * TODO tasks im system speichern
      */
     protected String title;
@@ -16,14 +16,13 @@ public abstract class Task{
     protected LocalTime time;
     protected Boolean reminder;
 
-    //Wenn der Button zum Speichern gedrückt wird wird das Objekt erzeugt und die Atrribute übern constructor übergeben
+    //super der Subclasses
     public Task(String title, String description, Boolean reminder, LocalTime time) {
         this.title = title;
         this.description = description;
         this.reminder = reminder;
         this.time = time;
     }
-
 
     //Getter & Setter
     public String getTitle() {
