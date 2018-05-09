@@ -27,11 +27,11 @@ import java.util.Calendar;
  * TODO reminderfunktion in tasks einbauen, ist ne seperate geschichte, wird über solche push notifications geregelt
  * TODO ist eine zeit bereits gewählt sollte diese noch nachträglich änderbar sein
  * (siehe https://www.youtube.com/watch?v=SWsuijO5NGE)
+ *TODO wenn kein datum (auch zeit?) ausgewählt, soll der task nicht erstellt werden können
  *
  *
  * vorallem:
  * TODO finde eine passende auswahlmöglichkeit für weekly
- * TODO datum/datums in richtiger form an jeweilige subtasks übergeben
  * TODO xml lauyout richtig sortieren und organisierte verankerungen
  *
  *
@@ -104,7 +104,6 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
         DatePickerDialog datePickerDialog = new DatePickerDialog(this, this, year, month, day);
         datePickerDialog.show();
     }
-
     //auswahl weiterer datuminen
     public void btnAddDateHandler(View v){
         Calendar c = Calendar.getInstance();
@@ -117,8 +116,6 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
 
         txtInputDate.setText(txtInputDate.getText() + ", " + dates.get(dates.size() - 1));
     }
-
-
     //nachdem das popup zur datumsasuwahl mit ok bestätigt wurde, wird diese methode aufgerufen, zuerstmal wird das datum abgespeichert (+ überprüfung ob doppelt)
     //wenn es das erste datum ist -> auch time picken
     @Override
@@ -135,10 +132,9 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
         else
             inputDay = Integer.toString(i2);
 
-
         dates.add(inputYear +"-"+ inputMonth +"-"+ inputDay);
 
-       if (btnPick.getVisibility() == View.VISIBLE){
+       if (btnPick.getVisibility() == View.VISIBLE){        //Timepicker soll nur bei erster auswahl geöffnet werden
            Calendar c = Calendar.getInstance();
            int hour = c.get(Calendar.HOUR_OF_DAY);
            int minute = c.get(Calendar.MINUTE);
@@ -171,9 +167,6 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
     //Erzeugung der Taskobjekte
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void addTask(View v){
-
-        //zum Übergeben des TaskObjekts
-      //  Intent returnTask = new Intent((Intent) null);
 
         EditText inputTitle = findViewById(R.id.inputTitle);
         EditText inputDescription = findViewById(R.id.inputDescription);
@@ -210,11 +203,6 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
         }else{
 
         }
-
-
-        //Rückgabe Teil2 "The grant finale"
-       // setResult(1, returnTask);
-        //finish();
     }
 
     public void btnDeleteHandler(View v){}
