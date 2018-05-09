@@ -25,15 +25,7 @@ public class TasksActivity extends AppCompatActivity {
      * TODO tasks löschen/erledigen
      */
 
-
-    //da die taskactivity über allen  tasks, die erzeugt werden steht, sollen hier erstmal alle tasks gespeichert werden
-    //das ganze ist public, damit wir uns späteren setter/getter kram zumindest vorzeitig sparen können
-
-    //(@kay, je nachdem, wie du die tasks speichert ist das hier nur provisorisch)
-
     private TaskStorage taskStorage;
-
-
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
@@ -71,8 +63,9 @@ public class TasksActivity extends AppCompatActivity {
 
     }
 
-    //Link zu TaskActivity
-    //hier  gibt es den rückgabewert aus taskcreator (der neue task leude), deshalb ist hier alles mega weird und kompliziert mit weirden intent gedöns und so
+    //Link zu TaskCreator
+    //  die Referenz zum TaskStorage wird mit übergeben über den Intent
+   
     public void gotoTaskcreator(View view){
 
         Intent intent = new Intent(this, TaskcreatorActivity.class);
@@ -80,19 +73,6 @@ public class TasksActivity extends AppCompatActivity {
         startActivity(intent);
         //startActivityForResult(intent,1); //1 == successful
     }
-
-    //automatisch ausgeführt, wenn task erstellt wurde -> speichert task auf liste
-    /*@Override
-    protected void onActivityResult (int requestCode, int resultCode, Intent data) {
-        if (requestCode == 1){
-            //tasks.add((TaskCustom) data.getExtras().getSerializable("TASK"));       //todo problem
-        }
-    }
-
-
-    private void startActivityForResult(Intent intent) {
-
-    }*/
 
 
     @Override
