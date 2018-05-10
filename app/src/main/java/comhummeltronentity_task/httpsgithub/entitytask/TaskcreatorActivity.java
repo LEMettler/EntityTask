@@ -1,5 +1,6 @@
 package comhummeltronentity_task.httpsgithub.entitytask;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Build;
@@ -59,6 +60,7 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
     private String inputTime;
     private String inputYear, inputMonth, inputDay;
     private ArrayList<String> dates = new ArrayList<>();
+    private AlertDialog.Builder  alertDialogBuilder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +78,9 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
         txtInputTime = findViewById(R.id.txtInputTime);
 
         taskStorage = getIntent().getParcelableExtra("TASKSTORAGE");
+
+        alertDialogBuilder = new AlertDialog.Builder(this);     //hier entsteht der dialog für die tage auswahl
+        alertDialogBuilder.setCancelable(true);
     }
 
     //Handler der Radiobutton -> Anzeige der Time/Date picker
@@ -87,8 +92,8 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
         btnPick.setVisibility(View.VISIBLE);
     }
 
-    public void rbtnWeeklyHandler(View v){
-        btnPick.setVisibility(View.GONE);
+    public void rbtnWeeklyHandler(View v){      //brauchen wir das noch?
+        btnPick.setVisibility(View.VISIBLE);
     }
 
 
@@ -96,13 +101,17 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
 
     //auswahl 1. datum & time
     public void btnPickHandler(View v){
-        Calendar c = Calendar.getInstance();
-        int year = c.get(Calendar.YEAR);
-        int month = c.get(Calendar.MONTH);
-        int day = c.get(Calendar.DAY_OF_MONTH);
 
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this, this, year, month, day);
-        datePickerDialog.show();
+        if (!rbtnWeekly.isChecked()) {
+            Calendar c = Calendar.getInstance();
+            int year = c.get(Calendar.YEAR);
+            int month = c.get(Calendar.MONTH);
+            int day = c.get(Calendar.DAY_OF_MONTH);
+
+            DatePickerDialog datePickerDialog = new DatePickerDialog(this, this, year, month, day);
+            datePickerDialog.show();
+        }else{
+        }
     }
     //auswahl weiterer datuminen
     public void btnAddDateHandler(View v){
