@@ -3,6 +3,7 @@ package comhummeltronentity_task.httpsgithub.entitytask;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -45,7 +46,7 @@ import java.util.Calendar;
 
 public class TaskcreatorActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
-    private TaskStorage taskStorage;
+    private TaskStorage taskStorage = new TaskStorage();
 
     //Attribute für GUI
     private RadioButton rbtnCustom;
@@ -77,7 +78,8 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
         txtInputDate = findViewById(R.id.txtInputDate);
         txtInputTime = findViewById(R.id.txtInputTime);
 
-        taskStorage = getIntent().getParcelableExtra("TASKSTORAGE");
+        //taskStorage = getIntent().getParcelableExtra("TASKSTORAGE");
+        taskStorage = getIntent().getExtras().getParcelable("TASKSTORAGE");
 
         alertDialogBuilder = new AlertDialog.Builder(this);     //hier entsteht der dialog für die tage auswahl
         alertDialogBuilder.setCancelable(true);
@@ -184,6 +186,7 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
         String description = inputDescription.getText().toString();
         Boolean reminder = switchReminder.isActivated();
 
+
         //CustomTask
         if (rbtnCustom.isChecked()) {
             ArrayList<LocalDate> datesFormat = new ArrayList<>();        //im falle von custom/monthly wird die
@@ -212,6 +215,12 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
         }else{
 
         }
+
+        //resulttest
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra("TASKSTORAGE", taskStorage);
+        setResult(1, resultIntent);
+        finish();
     }
 
     public void btnDeleteHandler(View v){}

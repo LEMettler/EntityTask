@@ -30,7 +30,8 @@ public class TaskStorage implements Parcelable{
     }
 
     private void readFromParcel(Parcel in){
-        tasks = in.readArrayList(null);
+        tasks = in.readArrayList(Task.class.getClassLoader());
+        //in.readList( tasks,Task.class.getClassLoader());
     }
 
     public static final Creator<TaskStorage> CREATOR = new Creator<TaskStorage>() {

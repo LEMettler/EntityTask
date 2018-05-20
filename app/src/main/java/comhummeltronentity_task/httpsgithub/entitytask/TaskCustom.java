@@ -1,5 +1,10 @@
 package comhummeltronentity_task.httpsgithub.entitytask;
 
+import android.annotation.SuppressLint;
+import android.os.Build;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -8,6 +13,7 @@ import java.util.ArrayList;
  * Created by Meerlu on 04.05.2018.
  */
 
+@SuppressLint("ParcelCreator")
 public class TaskCustom extends Task {
     /**
      * subklasse von task
@@ -26,6 +32,7 @@ public class TaskCustom extends Task {
     }
 
 
+
     //getter & setter
     public ArrayList<LocalDate> getDates() {
         return dates;
@@ -34,4 +41,42 @@ public class TaskCustom extends Task {
     public void setDates(ArrayList<LocalDate> dates) {
         this.dates = dates;
     }
+
+
+    public static final Parcelable.Creator<TaskCustom> CREATOR = new Parcelable.Creator<TaskCustom>() {
+        public TaskCustom createFromParcel(Parcel in) {
+            return new TaskCustom(in);
+        }
+
+        public TaskCustom[] newArray(int size) {
+            return new TaskCustom[size];
+        }
+    };
+
+    private TaskCustom(Parcel in) {
+        title = in.readString();
+        description = in.readString();
+        reminder = in.readByte() != 0;     //myBoolean == true if byte != 0
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            time = LocalTime.parse(in.readString());
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            dates = in.readArrayList(LocalDate.class.getClassLoader());
+        }
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+      parcel.writeString(this.title);
+      parcel.writeString(this.description);
+      parcel.writeByte((byte) (this.reminder ? 1 : 0)); //reminder(bool) -> byte (in parcel
+      parcel.writeString(this.time.toString());         //time(LocalTime) -> string (in parcel)
+      parcel.writeList(this.dates);     //todo macht vlcht probleme, dann liste ->string und dann probieren
+    }
+
 }

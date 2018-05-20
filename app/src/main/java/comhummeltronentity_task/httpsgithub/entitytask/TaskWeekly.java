@@ -1,11 +1,17 @@
 package comhummeltronentity_task.httpsgithub.entitytask;
 
+import android.annotation.SuppressLint;
+import android.os.Build;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.time.LocalTime;
 
 /**
  * Created by Meerlu on 04.05.2018.
  */
 
+@SuppressLint("ParcelCreator")
 public class TaskWeekly extends Task {
 
     /**
@@ -21,5 +27,39 @@ public class TaskWeekly extends Task {
         super(title, description,reminder, time);
 
         this.days = days;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Parcelable.Creator<TaskWeekly> CREATOR = new Parcelable.Creator<TaskWeekly>() {
+        public TaskWeekly createFromParcel(Parcel in) {
+            return new TaskWeekly(in);
+        }
+
+        public TaskWeekly[] newArray(int size) {
+            return new TaskWeekly[size];
+        }
+    };
+
+    private TaskWeekly(Parcel in) {
+        title = in.readString();
+        description = in.readString();
+        reminder = in.readByte() != 0;     //myBoolean == true if byte != 0
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            time = LocalTime.parse(in.readString());
+        }
+        days = (Boolean[]) in.readArray(Boolean.class.getClassLoader());
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(this.title);
+        parcel.writeString(this.description);
+        parcel.writeByte((byte) (this.reminder ? 1 : 0)); //reminder(bool) -> byte (in parcel
+        parcel.writeString(this.time.toString());         //time(LocalTime) -> string (in parcel)
+        parcel.writeArray(days);
     }
 }

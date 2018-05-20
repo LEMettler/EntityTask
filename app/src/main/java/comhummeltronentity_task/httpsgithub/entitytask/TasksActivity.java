@@ -70,8 +70,22 @@ public class TasksActivity extends AppCompatActivity {
 
         Intent intent = new Intent(this, TaskcreatorActivity.class);
         intent.putExtra("TASKSTORAGE",taskStorage);
-        startActivity(intent);
-        //startActivityForResult(intent,1); //1 == successful
+        //startActivity(intent);
+        startActivityForResult(intent,1); //1 == successful
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == 1) {
+            // Make sure the request was successful
+            //if (resultCode == RESULT_OK) {
+                taskStorage = data.getExtras().getParcelable("TASKSTORAGE");
+                System.out.println("*****************************************************");
+                System.out.println("*****************************************************");
+                System.out.println(taskStorage.getTasks().size());
+            //}
+        }
     }
 
 

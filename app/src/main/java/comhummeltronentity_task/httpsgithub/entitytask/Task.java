@@ -1,12 +1,14 @@
 package comhummeltronentity_task.httpsgithub.entitytask;
 
+import android.os.Parcelable;
+
 import java.time.LocalTime;
 
 /**
  * Created by Meerlu on 03.05.2018.
  */
 
-public abstract class Task{
+public abstract class Task implements Parcelable {
     /**
      * Blueprint für alle spezifischen Tasks
      * TODO tasks im system speichern
@@ -22,6 +24,9 @@ public abstract class Task{
         this.description = description;
         this.reminder = reminder;
         this.time = time;
+    }
+
+    protected Task() {
     }
 
     //Getter & Setter
