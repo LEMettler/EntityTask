@@ -2,7 +2,9 @@ package comhummeltronentity_task.httpsgithub.entitytask;
 
 import android.os.Parcelable;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 
 /**
  * Created by Meerlu on 03.05.2018.
@@ -61,4 +63,6 @@ public abstract class Task implements Parcelable {
     public void setReminder(Boolean reminder) {
         this.reminder = reminder;
     }
+
+    public abstract ArrayList<LocalDate> getDates();
 }

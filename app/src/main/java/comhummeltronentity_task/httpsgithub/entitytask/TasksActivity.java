@@ -25,7 +25,7 @@ public class TasksActivity extends AppCompatActivity {
      * TODO tasks löschen/erledigen
      */
 
-    private TaskStorage taskStorage;
+    private static TaskStorage taskStorage;
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
@@ -86,6 +86,7 @@ public class TasksActivity extends AppCompatActivity {
                 System.out.println(taskStorage.getTasks().size());
             //}
         }
+
     }
 
 
@@ -120,6 +121,10 @@ public class TasksActivity extends AppCompatActivity {
          * fragment.
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
+        private TextView title;
+        private TextView description;
+        private TextView time;
+        private TextView dates;
 
         public PlaceholderFragment() {
         }
@@ -139,9 +144,44 @@ public class TasksActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,                      //onCreateView des fragment
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_tasks, container, false);    //TODO anzeigen der dates
+            View rootView = inflater.inflate(R.layout.fragment_tasks, container, false);
             TextView section_label = (TextView) rootView.findViewById(R.id.section_label);
-            section_label.setText( "Task " + getArguments().getInt(ARG_SECTION_NUMBER));
+            section_label.setText("Task " + getArguments().getInt(ARG_SECTION_NUMBER));
+
+
+
+
+            // aus der liste der tasks den task mit dem index der section_number anzeigen
+            //********************************************************************************
+            int index = getArguments().getInt(ARG_SECTION_NUMBER) - 1;      //TODO anzeigen der dates
+
+            title = rootView.findViewById(R.id.txtTitle);
+            description = rootView.findViewById(R.id.txtDescription);
+            time = rootView.findViewById(R.id.txtTime);
+            dates = rootView.findViewById(R.id.txtDates);
+
+
+            if (taskStorage.getTasks().size() > index){
+                Task task;
+
+                if (taskStorage.getTasks().get(index) instanceof TaskCustom) {
+                    task = (TaskCustom) taskStorage.getTasks().get(index);
+                    dates.setText(task.getDates().get(0).toString());                   //todo, zeigt bisher nur 1 date
+                } else if (taskStorage.getTasks().get(index) instanceof TaskMonthly) {
+                    task = (TaskMonthly) taskStorage.getTasks().get(index);
+                    dates.setText((CharSequence) task.getDates().get(0).toString());
+                } else {
+                    task = (TaskWeekly) taskStorage.getTasks().get(index);
+                }
+
+                if (task != null) {
+                    title.setText(task.getTitle());
+                    description.setText(task.getDescription());
+                    time.setText(task.getTime().toString());
+                }
+            }
+            //*********************************************************************************
+
             return rootView;
         }
     }

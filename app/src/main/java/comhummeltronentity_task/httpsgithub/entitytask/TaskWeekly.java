@@ -5,7 +5,9 @@ import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 
 /**
  * Created by Meerlu on 04.05.2018.
@@ -61,5 +63,10 @@ public class TaskWeekly extends Task {
         parcel.writeByte((byte) (this.reminder ? 1 : 0)); //reminder(bool) -> byte (in parcel
         parcel.writeString(this.time.toString());         //time(LocalTime) -> string (in parcel)
         parcel.writeArray(days);
+    }
+
+    @Override
+    public ArrayList<LocalDate> getDates() {
+        return null;
     }
 }
