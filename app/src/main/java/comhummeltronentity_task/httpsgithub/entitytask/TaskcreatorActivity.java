@@ -25,7 +25,7 @@ import java.util.Calendar;
 /**
 * Hier werden die einzelnen Tasks erzeugt
  * TODO tasks löschen/back
- * TODO input-pretexte löschen bei touch
+ *
  * TODO reminderfunktion in tasks einbauen, ist ne seperate geschichte, wird über solche push notifications geregelt
  * TODO ist eine zeit bereits gewählt sollte diese noch nachträglich änderbar sein
  * (siehe https://www.youtube.com/watch?v=SWsuijO5NGE)
@@ -81,8 +81,21 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
         //taskStorage = getIntent().getParcelableExtra("TASKSTORAGE");
         taskStorage = getIntent().getExtras().getParcelable("TASKSTORAGE");
 
+
+
+        //**************************************************************************************************************************************
+        //**************************************************************************************************************************************
+        /**
+         * hier einen alertdialog erstellen, der für die weekly-auswahl einen dialog anzeigt, in dem versch tage ausgewählt werden können
+         * dazu müsst ihr die xml datei "dialog_weeky" in res/layout/ dem dialogbuilder adden etc.
+         * schaut tutorials dazu, was glaubt ihr, warum ich das nicht selbst mache.
+         * den dialog initialisiert ihr in btnPickHandler() und in addTask() soll ein weekly-task erstellt werden und geadded werden (siehe andere tasks)
+         */
         alertDialogBuilder = new AlertDialog.Builder(this);     //hier entsteht der dialog für die tage auswahl
-        alertDialogBuilder.setCancelable(true);
+
+
+        //**************************************************************************************************************************************
+        //**************************************************************************************************************************************
     }
 
     //Handler der Radiobutton -> Anzeige der Time/Date picker
@@ -113,6 +126,11 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
             DatePickerDialog datePickerDialog = new DatePickerDialog(this, this, year, month, day);
             datePickerDialog.show();
         }else{
+            /**
+             * hier den weekly-dialog erstellen
+             *anschließend soll auch ein timepicker erstellt werden (siehe ~ line 169)
+             * die tage (sollten am besten gleich) in einem boolean-array zwischengespeichert werden, um sie dann in addTask() gleich so zu adden
+             */
         }
     }
     //auswahl weiterer datuminen
@@ -213,6 +231,9 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
 
             //WeeklyTask                        //TODO weekly tasks erstellen
         }else{
+            /**
+             * hier die weekly-tasks erstellen und in den taskStorage adden
+             */
 
         }
 
