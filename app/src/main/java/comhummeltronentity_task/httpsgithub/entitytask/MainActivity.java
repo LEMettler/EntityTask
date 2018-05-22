@@ -27,7 +27,19 @@ public class MainActivity extends AppCompatActivity {
     public void gotoTasks(View view){
         Intent intent = new Intent(this, TasksActivity.class);
         intent.putExtra("TASKSTORAGE", taskStorage);    //Übergeben des Storage über Intent
-        startActivity(intent);
+        //startActivity(intent);                          //todo muss auch wie in taskactivity for result, damit wenn wir wieder reinundraus gehen, dann
+        startActivityForResult(intent, 1);
+    }                                                   //die tasks immernoch da sind
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == 1) {
+            // Make sure the request was successful
+            //if (resultCode == RESULT_OK)
+            taskStorage = data.getExtras().getParcelable("TASKSTORAGE");
+
+        }
     }
 
     //Link zu CalendarActivity

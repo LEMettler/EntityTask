@@ -50,7 +50,8 @@ public class TasksActivity extends AppCompatActivity {
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
 
-        taskStorage = getIntent().getParcelableExtra("TASKSTORAGE");
+        //taskStorage = getIntent().getParcelableExtra("TASKSTORAGE");
+        taskStorage = getIntent().getExtras().getParcelable("TASKSTORAGE");
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -74,6 +75,7 @@ public class TasksActivity extends AppCompatActivity {
         startActivityForResult(intent,1); //1 == successful
     }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Check which request we're responding to
@@ -86,6 +88,17 @@ public class TasksActivity extends AppCompatActivity {
                 System.out.println(taskStorage.getTasks().size());
             //}
         }
+
+    }
+
+    @Override
+    public void finish(){
+        //rückgabe des taskstorage an mainactivity
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra("TASKSTORAGE", taskStorage);
+        setResult(1, resultIntent);
+
+        super.finish();
 
     }
 
@@ -207,6 +220,7 @@ public class TasksActivity extends AppCompatActivity {
         public int getCount() {
             // wieviele seiten == anzahl der existierenden tasks
 
+            //return taskStorage.getTasks().size() + 1;
             return 3;
         }
     }
