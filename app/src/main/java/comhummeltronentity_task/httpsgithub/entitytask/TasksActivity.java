@@ -76,6 +76,9 @@ public class TasksActivity extends AppCompatActivity {
 
     }
 
+
+
+
     //Link zu TaskCreator
     //  die Referenz zum TaskStorage wird mit übergeben über den Intent
 
@@ -88,18 +91,20 @@ public class TasksActivity extends AppCompatActivity {
     }
 
 
+    //nach schließen des TaskCreators wird der taskStorage erneuert und der sectionspageadapter der fragments neu geladen
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Check which request we're responding to
         if (requestCode == 1) {
             // Make sure the request was successful
             //if (resultCode == RESULT_OK) {
+
             taskStorage = data.getExtras().getParcelable("TASKSTORAGE");
-            System.out.println("*****************************************************");
-            System.out.println("*****************************************************");
-            System.out.println(taskStorage.getTasks().size());
+
             //}
         }
+        setupViewPager(mViewPager);
+
 
     }
 
