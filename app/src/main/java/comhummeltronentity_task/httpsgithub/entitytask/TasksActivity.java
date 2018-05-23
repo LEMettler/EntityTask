@@ -3,36 +3,49 @@ package comhummeltronentity_task.httpsgithub.entitytask;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 public class TasksActivity extends AppCompatActivity {
     /**
      * Das Ist die Activity die die Übersicht über die einzelnen bereits erzeugten Tasks anzeigt
      * Über den kleinen button (fap) kommt man zum taskcreator
-     *
+     * <p>
      * TODO tasks anzeigen
      * TODO tasks löschen/erledigen
      */
 
+    private static final String TAG = "TaskActivity";
     private static TaskStorage taskStorage;
 
-    private SectionsPagerAdapter mSectionsPagerAdapter;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
+    private SectionsPageAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
+
+
+    //setup of fragments (1 task -> 1 fragment)
+    private void setupViewPager(ViewPager viewPager){
+        SectionsPageAdapter adapter = new SectionsPageAdapter(getSupportFragmentManager());
+
+        if (taskStorage.getTasks().size() == 0){
+            adapter.addFragment(new PlaceholderFragment(), "Placeholder");
+
+        }else {
+            for (Task t : taskStorage.getTasks()) {
+
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("TASK", t);
+                TaskviewFragment fragment = new TaskviewFragment();
+                fragment.setArguments(bundle);
+
+                adapter.addFragment(fragment, t.getTitle());
+            }
+        }
+        viewPager.setAdapter(adapter);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,17 +54,16 @@ public class TasksActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-
 
         //taskStorage = getIntent().getParcelableExtra("TASKSTORAGE");
         taskStorage = getIntent().getExtras().getParcelable("TASKSTORAGE");
+
+
+        //Fragment aufsetzung des viewpagers
+        mSectionsPagerAdapter =new SectionsPageAdapter(getSupportFragmentManager());
+        mViewPager = findViewById(R.id.container);
+        setupViewPager(mViewPager);
+
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -66,13 +78,13 @@ public class TasksActivity extends AppCompatActivity {
 
     //Link zu TaskCreator
     //  die Referenz zum TaskStorage wird mit übergeben über den Intent
-   
-    public void gotoTaskcreator(View view){
+
+    public void gotoTaskcreator(View view) {
 
         Intent intent = new Intent(this, TaskcreatorActivity.class);
-        intent.putExtra("TASKSTORAGE",taskStorage);
+        intent.putExtra("TASKSTORAGE", taskStorage);
         //startActivity(intent);
-        startActivityForResult(intent,1); //1 == successful
+        startActivityForResult(intent, 1); //1 == successful
     }
 
 
@@ -82,17 +94,17 @@ public class TasksActivity extends AppCompatActivity {
         if (requestCode == 1) {
             // Make sure the request was successful
             //if (resultCode == RESULT_OK) {
-                taskStorage = data.getExtras().getParcelable("TASKSTORAGE");
-                System.out.println("*****************************************************");
-                System.out.println("*****************************************************");
-                System.out.println(taskStorage.getTasks().size());
+            taskStorage = data.getExtras().getParcelable("TASKSTORAGE");
+            System.out.println("*****************************************************");
+            System.out.println("*****************************************************");
+            System.out.println(taskStorage.getTasks().size());
             //}
         }
 
     }
 
     @Override
-    public void finish(){
+    public void finish() {
         //rückgabe des taskstorage an mainactivity
         Intent resultIntent = new Intent();
         resultIntent.putExtra("TASKSTORAGE", taskStorage);
@@ -124,112 +136,5 @@ public class TasksActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-        private TextView title;
-        private TextView description;
-        private TextView time;
-        private TextView dates;
-
-        public PlaceholderFragment() {
-        }
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,                      //onCreateView des fragment
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_tasks, container, false);
-            TextView section_label = (TextView) rootView.findViewById(R.id.section_label);
-            section_label.setText("Task " + getArguments().getInt(ARG_SECTION_NUMBER));
-
-
-
-
-            // aus der liste der tasks den task mit dem index der section_number anzeigen
-            //********************************************************************************
-            int index = getArguments().getInt(ARG_SECTION_NUMBER) - 1;      //TODO anzeigen der dates
-
-            title = rootView.findViewById(R.id.txtTitle);
-            description = rootView.findViewById(R.id.txtDescription);
-            time = rootView.findViewById(R.id.txtTime);
-            dates = rootView.findViewById(R.id.txtDates);
-
-
-            if (taskStorage.getTasks().size() > index){
-                Task task;
-
-                if (taskStorage.getTasks().get(index) instanceof TaskCustom) {
-                    task = (TaskCustom) taskStorage.getTasks().get(index);
-                    dates.setText(task.getDates().get(0).toString());                   //todo, zeigt bisher nur 1 date
-                } else if (taskStorage.getTasks().get(index) instanceof TaskMonthly) {
-                    task = (TaskMonthly) taskStorage.getTasks().get(index);
-                    dates.setText((CharSequence) task.getDates().get(0).toString());
-                } else {
-                    task = (TaskWeekly) taskStorage.getTasks().get(index);
-                }
-
-                if (task != null) {
-                    title.setText(task.getTitle());
-                    description.setText(task.getDescription());
-                    time.setText(task.getTime().toString());
-                }
-            }
-            //*********************************************************************************
-
-            return rootView;
-        }
-    }
-
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
-        }
-
-        @Override
-        public int getCount() {
-            // wieviele seiten == anzahl der existierenden tasks
-
-            //return taskStorage.getTasks().size() + 1;
-            return 3;
-        }
-    }
 }
- /*
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
+
