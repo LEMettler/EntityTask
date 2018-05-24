@@ -1,9 +1,12 @@
-package comhummeltronentity_task.httpsgithub.entitytask;
+package comhummeltronentity_task.httpsgithub.entitytask.activity_classes;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+
+import comhummeltronentity_task.httpsgithub.entitytask.R;
+import comhummeltronentity_task.httpsgithub.entitytask.task_classes.TaskStorage;
 
 
 /**
@@ -27,9 +30,15 @@ public class MainActivity extends AppCompatActivity {
     public void gotoTasks(View view){
         Intent intent = new Intent(this, TasksActivity.class);
         intent.putExtra("TASKSTORAGE", taskStorage);    //Übergeben des Storage über Intent
-        //startActivity(intent);                          //todo muss auch wie in taskactivity for result, damit wenn wir wieder reinundraus gehen, dann
         startActivityForResult(intent, 1);
-    }                                                   //die tasks immernoch da sind
+    }
+
+    //Link zu CalendarActivity
+    public void gotoCalendar(View view){
+        Intent intent = new Intent(this, CalendarActivity.class);
+        intent.putExtra("TASKSTORAGE", taskStorage);    //Übergeben des Storage über Intent
+        startActivityForResult(intent, 1);
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -41,11 +50,4 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
-
-    //Link zu CalendarActivity
-    public void gotoCalendar(View view){
-        Intent intent = new Intent(this, CalendarActivity.class);
-        startActivity(intent);
-    }
-
 }

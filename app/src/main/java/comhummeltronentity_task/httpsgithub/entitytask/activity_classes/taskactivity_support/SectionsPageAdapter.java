@@ -1,4 +1,4 @@
-package comhummeltronentity_task.httpsgithub.entitytask;
+package comhummeltronentity_task.httpsgithub.entitytask.activity_classes.taskactivity_support;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

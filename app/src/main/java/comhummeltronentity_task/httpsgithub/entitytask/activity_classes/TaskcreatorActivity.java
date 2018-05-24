@@ -1,4 +1,4 @@
-package comhummeltronentity_task.httpsgithub.entitytask;
+package comhummeltronentity_task.httpsgithub.entitytask.activity_classes;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -21,6 +21,11 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import comhummeltronentity_task.httpsgithub.entitytask.R;
+import comhummeltronentity_task.httpsgithub.entitytask.task_classes.TaskCustom;
+import comhummeltronentity_task.httpsgithub.entitytask.task_classes.TaskMonthly;
+import comhummeltronentity_task.httpsgithub.entitytask.task_classes.TaskStorage;
 
 /**
 * Hier werden die einzelnen Tasks erzeugt

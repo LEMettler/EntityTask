@@ -1,4 +1,4 @@
-package comhummeltronentity_task.httpsgithub.entitytask;
+package comhummeltronentity_task.httpsgithub.entitytask.task_classes;
 
 import android.annotation.SuppressLint;
 import android.os.Build;

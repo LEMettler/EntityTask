@@ -1,4 +1,4 @@
-package comhummeltronentity_task.httpsgithub.entitytask;
+package comhummeltronentity_task.httpsgithub.entitytask.task_classes;
 
 /**
  * Created by Meerlu on 08.05.2018.

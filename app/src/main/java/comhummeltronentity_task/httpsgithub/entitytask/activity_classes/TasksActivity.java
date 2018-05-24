@@ -1,4 +1,4 @@
-package comhummeltronentity_task.httpsgithub.entitytask;
+package comhummeltronentity_task.httpsgithub.entitytask.activity_classes;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +9,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import comhummeltronentity_task.httpsgithub.entitytask.activity_classes.taskactivity_support.PlaceholderFragment;
+import comhummeltronentity_task.httpsgithub.entitytask.R;
+import comhummeltronentity_task.httpsgithub.entitytask.activity_classes.taskactivity_support.SectionsPageAdapter;
+import comhummeltronentity_task.httpsgithub.entitytask.activity_classes.taskactivity_support.TaskviewFragment;
+import comhummeltronentity_task.httpsgithub.entitytask.task_classes.Task;
+import comhummeltronentity_task.httpsgithub.entitytask.task_classes.TaskStorage;
 
 public class TasksActivity extends AppCompatActivity {
     /**
@@ -104,8 +111,6 @@ public class TasksActivity extends AppCompatActivity {
             //}
         }
         setupViewPager(mViewPager);
-
-
     }
 
     @Override

@@ -1,4 +1,4 @@
-package comhummeltronentity_task.httpsgithub.entitytask;
+package comhummeltronentity_task.httpsgithub.entitytask.task_classes;
 
 import android.annotation.SuppressLint;
 import android.os.Build;
@@ -14,21 +14,24 @@ import java.util.ArrayList;
  */
 
 @SuppressLint("ParcelCreator")
-public class TaskMonthly extends Task {
-
+public class TaskCustom extends Task {
     /**
-     * sub für monatliche tasks, auch hier gibt es eine liste, so können auch mehrere tage monthly wiederholt werden
+     * subklasse von task
+     * die einzelnen tage, an denen der task gilt, werden als liste gespeichert und können durch diese abgerufen werden
      * @param title
      * @param description
      * @param time
      */
+
     private ArrayList<LocalDate> dates = new ArrayList<>();
 
-    public TaskMonthly(String title, String description, Boolean reminder, LocalTime time, ArrayList<LocalDate> dates) {
+    public TaskCustom(String title, String description, Boolean reminder, LocalTime time, ArrayList<LocalDate> dates) {
         super(title, description, reminder, time);
 
         this.dates = dates;
     }
+
+
 
     //getter & setter
     public ArrayList<LocalDate> getDates() {
@@ -39,22 +42,18 @@ public class TaskMonthly extends Task {
         this.dates = dates;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
 
-    public static final Parcelable.Creator<TaskMonthly> CREATOR = new Parcelable.Creator<TaskMonthly>() {
-        public TaskMonthly createFromParcel(Parcel in) {
-            return new TaskMonthly(in);
+    public static final Parcelable.Creator<TaskCustom> CREATOR = new Parcelable.Creator<TaskCustom>() {
+        public TaskCustom createFromParcel(Parcel in) {
+            return new TaskCustom(in);
         }
 
-        public TaskMonthly[] newArray(int size) {
-            return new TaskMonthly[size];
+        public TaskCustom[] newArray(int size) {
+            return new TaskCustom[size];
         }
     };
 
-    private TaskMonthly(Parcel in) {
+    private TaskCustom(Parcel in) {
         title = in.readString();
         description = in.readString();
         reminder = in.readByte() != 0;     //myBoolean == true if byte != 0
@@ -67,11 +66,17 @@ public class TaskMonthly extends Task {
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(this.title);
-        parcel.writeString(this.description);
-        parcel.writeByte((byte) (this.reminder ? 1 : 0)); //reminder(bool) -> byte (in parcel
-        parcel.writeString(this.time.toString());         //time(LocalTime) -> string (in parcel)
-        parcel.writeList(this.dates);     //todo macht vlcht probleme, dann liste ->string und dann probieren
+    public int describeContents() {
+        return 0;
     }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+      parcel.writeString(this.title);
+      parcel.writeString(this.description);
+      parcel.writeByte((byte) (this.reminder ? 1 : 0)); //reminder(bool) -> byte (in parcel
+      parcel.writeString(this.time.toString());         //time(LocalTime) -> string (in parcel)
+      parcel.writeList(this.dates);     //todo macht vlcht probleme, dann liste ->string und dann probieren
+    }
+
 }

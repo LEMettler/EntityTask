@@ -1,4 +1,4 @@
-package comhummeltronentity_task.httpsgithub.entitytask;
+package comhummeltronentity_task.httpsgithub.entitytask.activity_classes.taskactivity_support;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -6,6 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import comhummeltronentity_task.httpsgithub.entitytask.R;
+import comhummeltronentity_task.httpsgithub.entitytask.task_classes.Task;
+import comhummeltronentity_task.httpsgithub.entitytask.task_classes.TaskCustom;
+import comhummeltronentity_task.httpsgithub.entitytask.task_classes.TaskMonthly;
 
 /**
  * Created by Meerlu on 23.05.2018.
