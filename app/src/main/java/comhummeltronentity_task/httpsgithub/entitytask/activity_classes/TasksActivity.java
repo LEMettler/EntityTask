@@ -10,7 +10,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import comhummeltronentity_task.httpsgithub.entitytask.activity_classes.taskactivity_support.PlaceholderFragment;
 import comhummeltronentity_task.httpsgithub.entitytask.R;
 import comhummeltronentity_task.httpsgithub.entitytask.activity_classes.taskactivity_support.SectionsPageAdapter;
 import comhummeltronentity_task.httpsgithub.entitytask.activity_classes.taskactivity_support.TaskviewFragment;
@@ -35,21 +34,16 @@ public class TasksActivity extends AppCompatActivity {
 
     //setup of fragments (1 task -> 1 fragment)
     private void setupViewPager(ViewPager viewPager){
+
         SectionsPageAdapter adapter = new SectionsPageAdapter(getSupportFragmentManager());
 
-        if (taskStorage.getTasks().size() == 0){
-            adapter.addFragment(new PlaceholderFragment(), "Placeholder");
+        for (Task t : taskStorage.getTasks()) {
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("TASK", t);
+            TaskviewFragment fragment = new TaskviewFragment();
+            fragment.setArguments(bundle);
 
-        }else {
-            for (Task t : taskStorage.getTasks()) {
-
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("TASK", t);
-                TaskviewFragment fragment = new TaskviewFragment();
-                fragment.setArguments(bundle);
-
-                adapter.addFragment(fragment, t.getTitle());
-            }
+            adapter.addFragment(fragment, t.getTitle());
         }
         viewPager.setAdapter(adapter);
     }
@@ -65,13 +59,10 @@ public class TasksActivity extends AppCompatActivity {
         //taskStorage = getIntent().getParcelableExtra("TASKSTORAGE");
         taskStorage = getIntent().getExtras().getParcelable("TASKSTORAGE");
 
-
         //Fragment aufsetzung des viewpagers
         mSectionsPagerAdapter =new SectionsPageAdapter(getSupportFragmentManager());
         mViewPager = findViewById(R.id.container);
         setupViewPager(mViewPager);
-
-
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -80,7 +71,6 @@ public class TasksActivity extends AppCompatActivity {
                 gotoTaskcreator(view);
             }
         });
-
     }
 
 
@@ -107,7 +97,6 @@ public class TasksActivity extends AppCompatActivity {
             //if (resultCode == RESULT_OK) {
 
             taskStorage = data.getExtras().getParcelable("TASKSTORAGE");
-
             //}
         }
         setupViewPager(mViewPager);

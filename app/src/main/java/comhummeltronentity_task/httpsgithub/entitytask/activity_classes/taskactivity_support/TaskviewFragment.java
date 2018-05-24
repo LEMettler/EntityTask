@@ -48,7 +48,7 @@ public class TaskviewFragment extends android.support.v4.app.Fragment {
     public void initialize(Task task){
 
         if (task instanceof TaskCustom) {
-            dates.setText(task.getDates().get(0).toString());                   //todo, zeigt bisher nur 1 date
+            dates.setText(task.getDates().get(0).toString());                   //todo, zeigt bisher nur 1 date und keine tage für weekly
         } else if (task instanceof TaskMonthly) {
             dates.setText((CharSequence) task.getDates().get(0).toString());
         } else {
