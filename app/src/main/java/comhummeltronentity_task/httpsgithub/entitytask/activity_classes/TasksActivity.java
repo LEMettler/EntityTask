@@ -1,5 +1,7 @@
 package comhummeltronentity_task.httpsgithub.entitytask.activity_classes;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -74,8 +76,6 @@ public class TasksActivity extends AppCompatActivity {
     }
 
 
-
-
     //Link zu TaskCreator
     //  die Referenz zum TaskStorage wird mit übergeben über den Intent
 
@@ -110,10 +110,10 @@ public class TasksActivity extends AppCompatActivity {
         setResult(1, resultIntent);
 
         super.finish();
-
     }
 
 
+    //erstellt die action bar oben, die die drei menüpunkte hat
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -121,6 +121,7 @@ public class TasksActivity extends AppCompatActivity {
         return true;
     }
 
+    //selected-handler bei auswahl eines menüpunktes
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -129,11 +130,29 @@ public class TasksActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.action_delete) {
+            if (!taskStorage.getTasks().isEmpty()) {
+                deleteDialog();                         //todo refresh nachdem ein task deletet wurde
+                //setupViewPager(mViewPager);
+            }
         }
-
         return super.onOptionsItemSelected(item);
     }
+
+    //erstellt einen dialog zum deleten des tasks X
+    private void deleteDialog(){
+        new AlertDialog.Builder(this)
+                .setTitle((CharSequence) taskStorage.getTasks().get(mViewPager.getCurrentItem()).getTitle())
+                .setMessage("Delete?")
+                .setNegativeButton("No", null)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        taskStorage.getTasks().remove(mViewPager.getCurrentItem());
+                    }
+                }).create().show();
+    }
+
+
 }
 

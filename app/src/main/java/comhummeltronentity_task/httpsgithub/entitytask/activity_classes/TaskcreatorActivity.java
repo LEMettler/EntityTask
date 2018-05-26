@@ -59,6 +59,7 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
     private RadioButton rbtnWeekly;
     private Button btnPick;
     private Button btnAddDate;
+    private Button btnSave;
     private TextView txtInputDate, txtInputTime;
     private Switch switchReminder;
 
@@ -78,6 +79,8 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
         rbtnCustom = findViewById(R.id.rbtnCustom);
         rbtnMonthly = findViewById(R.id.rbtnMonthly);
         rbtnWeekly = findViewById(R.id.rbtnWeekly);
+        btnSave = findViewById(R.id.btnSave);
+        btnSave.setVisibility(View.GONE);
 
         switchReminder = findViewById(R.id.switchReminder);
         txtInputDate = findViewById(R.id.txtInputDate);
@@ -190,11 +193,12 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
         else
             inputTime = inputTime + i1 + ":00";
 
-        btnPick.setVisibility(View.GONE);
-        btnAddDate.setVisibility(View.VISIBLE);
-
         txtInputDate.setText(dates.get(0));
         txtInputTime.setText(inputTime);
+
+        btnPick.setVisibility(View.GONE);
+        btnAddDate.setVisibility(View.VISIBLE);
+        btnSave.setVisibility(View.VISIBLE);
     }
 
 
@@ -242,13 +246,27 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
 
         }
 
-        //resulttest
+        //zurück zu taskactivity
         Intent resultIntent = new Intent();
         resultIntent.putExtra("TASKSTORAGE", taskStorage);
         setResult(1, resultIntent);
         finish();
     }
 
-    public void btnDeleteHandler(View v){}
+
+//delete-button -> zurück
+    public void btnDeleteHandler(View v){
+        finish();
+    }
+
+    @Override
+    public void finish() {
+        //rückgabe des taskstorage an taskactivity (auch ohne änderung oder sinn , nur für guten codeflow)
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra("TASKSTORAGE", taskStorage);
+        setResult(1, resultIntent);
+
+        super.finish();
+    }
 
 }

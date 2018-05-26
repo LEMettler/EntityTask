@@ -22,4 +22,5 @@
     <string name="txtDates">Date</string>
     <string name="txtTimes">Time</string>
     <string name="days">Days</string>
+    <string name="action_delete">Delete Task</string>
 </resources>
