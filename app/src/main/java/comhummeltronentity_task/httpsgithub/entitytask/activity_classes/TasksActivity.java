@@ -134,6 +134,8 @@ public class TasksActivity extends AppCompatActivity {
             if (!taskStorage.getTasks().isEmpty()) {
                 deleteDialog();                         //todo refresh nachdem ein task deletet wurde
                 //setupViewPager(mViewPager);
+            }else if (id == R.id.action_edit){
+                //todo call taskceator and parse the existing data
             }
         }
         return super.onOptionsItemSelected(item);
