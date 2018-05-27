@@ -23,18 +23,19 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import comhummeltronentity_task.httpsgithub.entitytask.R;
+import comhummeltronentity_task.httpsgithub.entitytask.task_classes.Task;
 import comhummeltronentity_task.httpsgithub.entitytask.task_classes.TaskCustom;
 import comhummeltronentity_task.httpsgithub.entitytask.task_classes.TaskMonthly;
 import comhummeltronentity_task.httpsgithub.entitytask.task_classes.TaskStorage;
 
 /**
 * Hier werden die einzelnen Tasks erzeugt
- * TODO tasks löschen/back
+ * TODO tasks löschen/back  DONE
  *
  * TODO reminderfunktion in tasks einbauen, ist ne seperate geschichte, wird über solche push notifications geregelt
  * TODO ist eine zeit bereits gewählt sollte diese noch nachträglich änderbar sein
  * (siehe https://www.youtube.com/watch?v=SWsuijO5NGE)
- *TODO wenn kein datum (auch zeit?) ausgewählt, soll der task nicht erstellt werden können
+ *TODO wenn kein datum (auch zeit?) ausgewählt, soll der task nicht erstellt werden können  DONE
  *
  *
  * vorallem:
@@ -62,6 +63,9 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
     private Button btnSave;
     private TextView txtInputDate, txtInputTime;
     private Switch switchReminder;
+    private EditText inputTitle;
+    private EditText inputDescription;
+
 
     //Attribute zum Date/Time input
     private String inputTime;
@@ -74,6 +78,9 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_taskcreator);
 
+
+        inputTitle = findViewById(R.id.inputTitle);
+        inputDescription = findViewById(R.id.inputDescription);
         btnPick = findViewById(R.id.btnPick);
         btnAddDate = findViewById(R.id.btnAddDate);
         rbtnCustom = findViewById(R.id.rbtnCustom);
@@ -89,6 +96,13 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
         //taskStorage = getIntent().getParcelableExtra("TASKSTORAGE");
         taskStorage = getIntent().getExtras().getParcelable("TASKSTORAGE");
 
+        //edit eines bestehenden tasks - setup
+        int i = getIntent().getExtras().getInt("EDITTASK");
+        if (i >= 0){
+            Task task = taskStorage.getTasks().get(i);
+            inputTitle.setText(task.getTitle());
+            inputDescription.setText(task.getDescription());
+        }
 
 
         //**************************************************************************************************************************************
@@ -206,8 +220,6 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void addTask(View v){
 
-        EditText inputTitle = findViewById(R.id.inputTitle);
-        EditText inputDescription = findViewById(R.id.inputDescription);
 
         String title = inputTitle.getText().toString();
         String description = inputDescription.getText().toString();

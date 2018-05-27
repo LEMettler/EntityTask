@@ -19,6 +19,7 @@ public abstract class Task implements Parcelable {
     protected String description;
     protected LocalTime time;
     protected Boolean reminder;
+    public String TYPE;
 
     //super der Subclasses
     public Task(String title, String description, Boolean reminder, LocalTime time) {

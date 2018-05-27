@@ -24,11 +24,15 @@ public class TaskWeekly extends Task {
      */
 
     private Boolean[] days = new Boolean[7];
+    public String TYPE;
+
 
     public TaskWeekly(String title, String description, Boolean reminder, LocalTime time, Boolean[] days) {
         super(title, description,reminder, time);
 
         this.days = days;
+        TYPE = "WEEKLY";
+
     }
 
     @Override

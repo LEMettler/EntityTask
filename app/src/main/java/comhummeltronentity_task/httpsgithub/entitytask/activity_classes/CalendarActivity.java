@@ -48,45 +48,62 @@ public class CalendarActivity extends AppCompatActivity {
                 String date;
                 date = Integer.toString(i) + "-";
                 i1++;
-                if (i1<10){
+                if (i1 < 10) {
                     date = date + "0";              //das wunder von struktogram
                 }
                 date = date + i1 + "-";
-                if (i2<10){
+                if (i2 < 10) {
                     date = date + "0";
                 }
                 date = date + i2;
 
                 selectedDate = LocalDate.parse(date);
 
-                System.out.println(date);
                 refreshViewPager();
             }
         });
     }
 
-        //erstellen/erneuern  des staskslider(viewpager) auf basis des ausgewählten datumani
-    private void refreshViewPager(){
+    //erstellen/erneuern  des staskslider(viewpager) auf basis des ausgewählten datumani
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void refreshViewPager() {
 
-        ArrayList<Task> selectedTasks = new ArrayList<>();
+        ArrayList<Task> selectedTasks = new ArrayList<>();              //TODO tasks, spezifisch für ihren type anzeigen
 
-        for (Task t : taskStorage.getTasks() ) {
-            if (t.getDates().contains(selectedDate)){
-                selectedTasks.add(t);
+        for (Task t : taskStorage.getTasks()) {
+            if (t.TYPE == "MONTHLY") {
+                for (LocalDate d : t.getDates()) {
+                    if (d.getDayOfMonth() == selectedDate.getDayOfMonth()) { //checkt für jeden monthlytask jedes datum ob der tag passt
+                        selectedTasks.add(t);
+                        break;
+                    }
+                }
+
+            } else if (t.TYPE == "CUSTOM") {
+                if (t.getDates().contains(selectedDate)) {
+                    selectedTasks.add(t);
+                }
+            } else {
+                if (t.getDates().contains(selectedDate)) {
+                    selectedTasks.add(t);
+                    //weekly                                    //todo anzeige von weekly anhand von days
+                }
+
             }
+
+            ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this, selectedTasks);
+            viewPager.setAdapter(viewPagerAdapter);
         }
-
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this, selectedTasks);
-        viewPager.setAdapter(viewPagerAdapter);
     }
 
-    @Override
-    public void finish() {
-        //rückgabe des taskstorage an mainactivity
-        Intent resultIntent = new Intent();
-        resultIntent.putExtra("TASKSTORAGE", taskStorage);
-        setResult(1, resultIntent);
+        @Override
+        public void finish() {
+            //rückgabe des taskstorage an mainactivity
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra("TASKSTORAGE", taskStorage);
+            setResult(1, resultIntent);
 
-        super.finish();
+            super.finish();
+        }
     }
-}
+

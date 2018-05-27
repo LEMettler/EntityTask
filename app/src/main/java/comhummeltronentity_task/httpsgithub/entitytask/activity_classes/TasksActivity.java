@@ -80,10 +80,9 @@ public class TasksActivity extends AppCompatActivity {
     //  die Referenz zum TaskStorage wird mit übergeben über den Intent
 
     public void gotoTaskcreator(View view) {
-
         Intent intent = new Intent(this, TaskcreatorActivity.class);
-        intent.putExtra("TASKSTORAGE", taskStorage);
-        //startActivity(intent);
+        intent.putExtra("TASKSTORAGE", taskStorage);                    //übergabe des taskSotrage
+        intent.putExtra("EDITTASK", -1);    //-1 == es gibt keinen task, der geeditet werden soll
         startActivityForResult(intent, 1); //1 == successful
     }
 
@@ -130,15 +129,27 @@ public class TasksActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_delete) {
-            if (!taskStorage.getTasks().isEmpty()) {
+        if (!taskStorage.getTasks().isEmpty()) {
+            if (id == R.id.action_delete) {
                 deleteDialog();                         //todo refresh nachdem ein task deletet wurde
                 //setupViewPager(mViewPager);
+
             }else if (id == R.id.action_edit){
-                //todo call taskceator and parse the existing data
+                editTask();
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    //todo call taskceator and parse the existing data
+    private void editTask(){
+        /*
+        Intent intent = new Intent(this, TaskcreatorActivity.class);
+        intent.putExtra("TASKSTORAGE", taskStorage);                    //übergabe des taskSotrage
+        intent.putExtra("EDITTASK", mViewPager.getCurrentItem());       //übergabe des task-indexes, das geeditet werden soll
+        taskStorage.getTasks().remove(mViewPager.getCurrentItem());
+        startActivityForResult(intent, 1); //1 == successful
+        */
     }
 
     //erstellt einen dialog zum deleten des tasks X

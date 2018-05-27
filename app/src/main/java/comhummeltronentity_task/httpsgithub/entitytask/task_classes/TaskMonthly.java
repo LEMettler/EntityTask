@@ -23,11 +23,14 @@ public class TaskMonthly extends Task {
      * @param time
      */
     private ArrayList<LocalDate> dates = new ArrayList<>();
+    public String TYPE;
+
 
     public TaskMonthly(String title, String description, Boolean reminder, LocalTime time, ArrayList<LocalDate> dates) {
         super(title, description, reminder, time);
 
         this.dates = dates;
+        TYPE = "MONTHLY";
     }
 
     //getter & setter
