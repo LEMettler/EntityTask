@@ -1,11 +1,14 @@
 package comhummeltronentity_task.httpsgithub.entitytask.activity_classes.taskactivity_support;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import java.time.LocalDate;
 
 import comhummeltronentity_task.httpsgithub.entitytask.R;
 import comhummeltronentity_task.httpsgithub.entitytask.task_classes.Task;
@@ -46,11 +49,18 @@ public class TaskviewFragment extends android.support.v4.app.Fragment {
     }
 
     public void initialize(Task task){
-
         if (task instanceof TaskCustom) {
-            dates.setText(task.getDates().get(0).toString());                   //todo, zeigt bisher nur 1 date und keine tage für weekly
+            dates.setText("");
+            for (LocalDate d : task.getDates()){
+                dates.setText(dates.getText()  + d.toString() + ", ");
+            }                                                            //todo, zeigt bisher nur 1 date und keine tage für weekly
         } else if (task instanceof TaskMonthly) {
-            dates.setText((CharSequence) task.getDates().get(0).toString());
+            dates.setText("");
+            for (LocalDate d : task.getDates()){
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    dates.setText(dates.getText() + String.valueOf(d.getDayOfMonth()) + ", ");
+                }
+            }
         } else {
             //show days
         }

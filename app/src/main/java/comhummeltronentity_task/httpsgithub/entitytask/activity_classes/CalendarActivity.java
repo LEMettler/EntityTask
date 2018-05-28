@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import comhummeltronentity_task.httpsgithub.entitytask.R;
 import comhummeltronentity_task.httpsgithub.entitytask.activity_classes.calendaractivity_support.ViewPagerAdapter;
 import comhummeltronentity_task.httpsgithub.entitytask.task_classes.Task;
+import comhummeltronentity_task.httpsgithub.entitytask.task_classes.TaskCustom;
+import comhummeltronentity_task.httpsgithub.entitytask.task_classes.TaskMonthly;
 import comhummeltronentity_task.httpsgithub.entitytask.task_classes.TaskStorage;
 
 /**
@@ -71,7 +73,7 @@ public class CalendarActivity extends AppCompatActivity {
         ArrayList<Task> selectedTasks = new ArrayList<>();              //TODO tasks, spezifisch für ihren type anzeigen
 
         for (Task t : taskStorage.getTasks()) {
-            if (t.TYPE == "MONTHLY") {
+            if (t instanceof TaskMonthly) {
                 for (LocalDate d : t.getDates()) {
                     if (d.getDayOfMonth() == selectedDate.getDayOfMonth()) { //checkt für jeden monthlytask jedes datum ob der tag passt
                         selectedTasks.add(t);
@@ -79,7 +81,7 @@ public class CalendarActivity extends AppCompatActivity {
                     }
                 }
 
-            } else if (t.TYPE == "CUSTOM") {
+            } else if (t instanceof TaskCustom) {
                 if (t.getDates().contains(selectedDate)) {
                     selectedTasks.add(t);
                 }

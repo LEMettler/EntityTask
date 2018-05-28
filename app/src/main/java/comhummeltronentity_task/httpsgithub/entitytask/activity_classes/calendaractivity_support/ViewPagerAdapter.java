@@ -19,7 +19,7 @@ import comhummeltronentity_task.httpsgithub.entitytask.task_classes.Task;
  *
  * builds den slider()viewPager in der CalendarActivity
  *
- * todo nur die tasks des tags X
+ * todo nur die tasks des tags X DONE
  * todo description anzeigen?
  */
 

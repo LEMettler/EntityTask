@@ -1,6 +1,7 @@
 package comhummeltronentity_task.httpsgithub.entitytask.activity_classes;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -135,21 +136,34 @@ public class TasksActivity extends AppCompatActivity {
                 //setupViewPager(mViewPager);
 
             }else if (id == R.id.action_edit){
-                editTask();
+                editDialog();
             }
         }
         return super.onOptionsItemSelected(item);
     }
 
-    //todo call taskceator and parse the existing data
-    private void editTask(){
-        /*
-        Intent intent = new Intent(this, TaskcreatorActivity.class);
-        intent.putExtra("TASKSTORAGE", taskStorage);                    //übergabe des taskSotrage
-        intent.putExtra("EDITTASK", mViewPager.getCurrentItem());       //übergabe des task-indexes, das geeditet werden soll
-        taskStorage.getTasks().remove(mViewPager.getCurrentItem());
-        startActivityForResult(intent, 1); //1 == successful
-        */
+    //todo call taskceator after an dialog and parse the existing data
+    private void editDialog(){
+        final Context context = this;
+
+        new AlertDialog.Builder(this)
+                .setTitle((CharSequence) taskStorage.getTasks().get(mViewPager.getCurrentItem()).getTitle())
+                .setMessage("Edit?")
+                .setNegativeButton("No", null)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        Intent intent = new Intent(context, TaskcreatorActivity.class);
+                        intent.putExtra("TASKSTORAGE", taskStorage);                    //übergabe des taskSotrage
+                        intent.putExtra("EDITTASK", mViewPager.getCurrentItem());       //übergabe des task-indexes, das geeditet werden soll
+                        taskStorage.getTasks().remove(mViewPager.getCurrentItem());
+                        startActivityForResult(intent, 1); //1 == successful
+
+                    }
+                }).create().show();
+
+
     }
 
     //erstellt einen dialog zum deleten des tasks X
