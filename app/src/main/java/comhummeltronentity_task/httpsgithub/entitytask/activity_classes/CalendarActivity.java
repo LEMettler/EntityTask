@@ -39,7 +39,7 @@ public class CalendarActivity extends AppCompatActivity {
 
         taskStorage = getIntent().getExtras().getParcelable("TASKSTORAGE");
 
-        viewPager = findViewById(R.id.viewPager);                                                   //initialisiert den taskslider(viewpager)
+        viewPager = findViewById(R.id.viewPager);   //initialisiert den taskslider
 
         calendar = findViewById(R.id.calendarView);
         selectedDate = null;                                                                        //Listener für ausgewählte tage
@@ -64,6 +64,32 @@ public class CalendarActivity extends AppCompatActivity {
                 refreshViewPager();
             }
         });
+
+    }
+
+    //vom viewpageadapter gecallt wenn ein view geklickt wird
+    public void gotoTaskActivity(Task task){
+        int itemIndex = taskStorage.getTasks().indexOf(task);
+
+        Intent intent = new Intent(this, TasksActivity.class);
+        intent.putExtra("TASKSTORAGE", taskStorage);    //Übergeben des Storage über Intent
+        intent.putExtra("ITEMINDEX", itemIndex);    //übergeben des index des longclicked-task, der angezeigt werden soll
+        startActivityForResult(intent, 1);
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == 1) {
+            // Make sure the request was successful
+            //if (resultCode == RESULT_OK)
+            taskStorage = data.getExtras().getParcelable("TASKSTORAGE");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                refreshViewPager();
+            }
+            viewPager.setCurrentItem(data.getExtras().getInt("ITEMINDEX"));
+        }
     }
 
     //erstellen/erneuern  des staskslider(viewpager) auf basis des ausgewählten datumani
@@ -80,7 +106,6 @@ public class CalendarActivity extends AppCompatActivity {
                         break;
                     }
                 }
-
             } else if (t instanceof TaskCustom) {
                 if (t.getDates().contains(selectedDate)) {
                     selectedTasks.add(t);
@@ -90,13 +115,14 @@ public class CalendarActivity extends AppCompatActivity {
                     selectedTasks.add(t);
                     //weekly                                    //todo anzeige von weekly anhand von days
                 }
-
             }
 
             ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this, selectedTasks);
             viewPager.setAdapter(viewPagerAdapter);
         }
     }
+
+
 
         @Override
         public void finish() {

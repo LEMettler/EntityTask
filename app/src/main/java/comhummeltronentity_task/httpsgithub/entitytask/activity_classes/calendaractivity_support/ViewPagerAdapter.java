@@ -11,6 +11,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import comhummeltronentity_task.httpsgithub.entitytask.R;
+import comhummeltronentity_task.httpsgithub.entitytask.activity_classes.CalendarActivity;
 import comhummeltronentity_task.httpsgithub.entitytask.task_classes.Task;
 
 /**
@@ -28,11 +29,13 @@ public class ViewPagerAdapter extends PagerAdapter {
     private Context context;
     private LayoutInflater layoutInflater;
     private ArrayList<Task> taskList;
+    private CalendarActivity calendar;
 
 
     public ViewPagerAdapter(Context context,ArrayList<Task> taskList) {
         this.context = context;
         this.taskList = taskList;
+        calendar = (CalendarActivity) context;
     }
 
     @Override
@@ -48,7 +51,7 @@ public class ViewPagerAdapter extends PagerAdapter {
 
     //initializiert ein item der liste
     @Override
-    public Object instantiateItem(ViewGroup container, int position) {
+    public Object instantiateItem(ViewGroup container, final int position) {
 
             layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View view = layoutInflater.inflate(R.layout.fragment_taskslider, null);
@@ -59,6 +62,13 @@ public class ViewPagerAdapter extends PagerAdapter {
 
             ViewPager viewPager = (ViewPager) container;
             viewPager.addView(view, 0);
+
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                 calendar.gotoTaskActivity(taskList.get(position));
+                }
+            });
 
             return view;
     }

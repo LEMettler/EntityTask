@@ -33,6 +33,7 @@ public class TasksActivity extends AppCompatActivity {
 
     private SectionsPageAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
+    private int item;
 
 
     //setup of fragments (1 task -> 1 fragment)
@@ -61,11 +62,16 @@ public class TasksActivity extends AppCompatActivity {
 
         //taskStorage = getIntent().getParcelableExtra("TASKSTORAGE");
         taskStorage = getIntent().getExtras().getParcelable("TASKSTORAGE");
+        item = getIntent().getExtras().getInt("ITEMINDEX");
 
         //Fragment aufsetzung des viewpagers
         mSectionsPagerAdapter =new SectionsPageAdapter(getSupportFragmentManager());
         mViewPager = findViewById(R.id.container);
         setupViewPager(mViewPager);
+        if (item >= 0){                                         //when a special itemindex was parced, it should be shown
+            mViewPager.setCurrentItem(item, true);
+        }
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -107,6 +113,7 @@ public class TasksActivity extends AppCompatActivity {
         //rückgabe des taskstorage an mainactivity
         Intent resultIntent = new Intent();
         resultIntent.putExtra("TASKSTORAGE", taskStorage);
+        resultIntent.putExtra("ITEMINDEX", item);
         setResult(1, resultIntent);
 
         super.finish();
@@ -147,8 +154,8 @@ public class TasksActivity extends AppCompatActivity {
         final Context context = this;
 
         new AlertDialog.Builder(this)
-                .setTitle((CharSequence) taskStorage.getTasks().get(mViewPager.getCurrentItem()).getTitle())
-                .setMessage("Edit?")
+                .setTitle((CharSequence) taskStorage.getTasks().get(mViewPager.getCurrentItem()).getTitle())    //vom viewpager kann der angesehene taskindex gepullt werden, aber weil java
+                .setMessage("Edit?")                                                                            //inkongruent ist -> X -1
                 .setNegativeButton("No", null)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
@@ -159,27 +166,26 @@ public class TasksActivity extends AppCompatActivity {
                         intent.putExtra("EDITTASK", mViewPager.getCurrentItem());       //übergabe des task-indexes, das geeditet werden soll
                         taskStorage.getTasks().remove(mViewPager.getCurrentItem());
                         startActivityForResult(intent, 1); //1 == successful
-
+                        setupViewPager(mViewPager);
                     }
                 }).create().show();
-
-
+        //setupViewPager(mViewPager);
     }
 
+    //todo delete funktioniert noch nicht so 100%, geliches prob, wie edit
     //erstellt einen dialog zum deleten des tasks X
     private void deleteDialog(){
-        new AlertDialog.Builder(this)
-                .setTitle((CharSequence) taskStorage.getTasks().get(mViewPager.getCurrentItem()).getTitle())
+        new AlertDialog.Builder(this)                           //vom viewpager kann der angesehene taskindex gepullt werden, aber weil java
+                .setTitle((CharSequence) taskStorage.getTasks().get(mViewPager.getCurrentItem()).getTitle())    //inkongruent ist -> X -1
                 .setMessage("Delete?")
                 .setNegativeButton("No", null)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         taskStorage.getTasks().remove(mViewPager.getCurrentItem());
+                        setupViewPager(mViewPager);
                     }
                 }).create().show();
     }
-
-
 }
 

@@ -24,4 +24,6 @@
     <string name="days">Days</string>
     <string name="action_delete">Delete</string>
     <string name="action_edit">Edit</string>
+    <string name="add_date">Add Date</string>
+    <string name="cancel">Cancel</string>
 </resources>

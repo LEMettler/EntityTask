@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     public void gotoTasks(View view){
         Intent intent = new Intent(this, TasksActivity.class);
         intent.putExtra("TASKSTORAGE", taskStorage);    //Übergeben des Storage über Intent
+        intent.putExtra("ITEMINDEX", -1);   //kein spezielles item, das angezeigt werde soll
         startActivityForResult(intent, 1);
     }
 
