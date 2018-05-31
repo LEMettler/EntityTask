@@ -30,16 +30,16 @@ import comhummeltronentity_task.httpsgithub.entitytask.task_classes.TaskStorage;
 
 /**
 * Hier werden die einzelnen Tasks erzeugt
- * TODO tasks löschen/back  DONE
+ * DONE tasks löschen/back
  *
  * TODO reminderfunktion in tasks einbauen, ist ne seperate geschichte, wird über solche push notifications geregelt
  * TODO ist eine zeit bereits gewählt sollte diese noch nachträglich änderbar sein
  * (siehe https://www.youtube.com/watch?v=SWsuijO5NGE)
- *TODO wenn kein datum (auch zeit?) ausgewählt, soll der task nicht erstellt werden können  DONE
+ *DONE wenn kein datum (auch zeit?) ausgewählt, soll der task nicht erstellt werden können
  *
  *
  * vorallem:
- * TODO finde eine passende auswahlmöglichkeit für weekly
+ * DONE finde eine passende auswahlmöglichkeit für weekly
  * TODO xml lauyout richtig sortieren und organisierte verankerungen
  *
  *

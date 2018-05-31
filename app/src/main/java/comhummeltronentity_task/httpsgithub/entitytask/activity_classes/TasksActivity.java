@@ -24,8 +24,8 @@ public class TasksActivity extends AppCompatActivity {
      * Das Ist die Activity die die Übersicht über die einzelnen bereits erzeugten Tasks anzeigt
      * Über den kleinen button (fap) kommt man zum taskcreator
      * <p>
-     * TODO tasks anzeigen
-     * TODO tasks löschen/erledigen
+     * DONE tasks anzeigen
+     * DONE tasks löschen/erledigen
      */
 
     private static final String TAG = "TaskActivity";

@@ -8,6 +8,7 @@ import android.os.Parcelable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by Meerlu on 04.05.2018.
@@ -24,15 +25,13 @@ public class TaskCustom extends Task {
      */
 
     private ArrayList<LocalDate> dates = new ArrayList<>();
-    public String TYPE;
-
 
     public TaskCustom(String title, String description, Boolean reminder, LocalTime time, ArrayList<LocalDate> dates) {
         super(title, description, reminder, time);
 
         this.dates = dates;
-        TYPE = "CUSTOM";
-
+        this.dateDone = new Boolean[dates.size()];
+        Arrays.fill(dateDone,false);
     }
 
 
@@ -80,7 +79,8 @@ public class TaskCustom extends Task {
       parcel.writeString(this.description);
       parcel.writeByte((byte) (this.reminder ? 1 : 0)); //reminder(bool) -> byte (in parcel
       parcel.writeString(this.time.toString());         //time(LocalTime) -> string (in parcel)
-      parcel.writeList(this.dates);     //todo macht vlcht probleme, dann liste ->string und dann probieren
+      parcel.writeList(this.dates);     // macht vlcht probleme, dann liste ->string und dann probieren
+      parcel.writeArray(dateDone);
     }
 
 }

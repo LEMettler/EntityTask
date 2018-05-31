@@ -8,6 +8,7 @@ import android.os.Parcelable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by Meerlu on 04.05.2018.
@@ -23,14 +24,13 @@ public class TaskMonthly extends Task {
      * @param time
      */
     private ArrayList<LocalDate> dates = new ArrayList<>();
-    public String TYPE;
-
 
     public TaskMonthly(String title, String description, Boolean reminder, LocalTime time, ArrayList<LocalDate> dates) {
         super(title, description, reminder, time);
 
         this.dates = dates;
-        TYPE = "MONTHLY";
+        this.dateDone = new Boolean[dates.size()];
+        Arrays.fill(dateDone,false);
     }
 
     //getter & setter
@@ -75,6 +75,8 @@ public class TaskMonthly extends Task {
         parcel.writeString(this.description);
         parcel.writeByte((byte) (this.reminder ? 1 : 0)); //reminder(bool) -> byte (in parcel
         parcel.writeString(this.time.toString());         //time(LocalTime) -> string (in parcel)
-        parcel.writeList(this.dates);     //todo macht vlcht probleme, dann liste ->string und dann probieren
+        parcel.writeList(this.dates);
+        parcel.writeArray(dateDone);
+
     }
 }

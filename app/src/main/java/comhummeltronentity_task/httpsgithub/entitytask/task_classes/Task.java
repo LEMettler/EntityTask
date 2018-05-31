@@ -13,13 +13,16 @@ import java.util.ArrayList;
 public abstract class Task implements Parcelable {
     /**
      * Blueprint für alle spezifischen Tasks
+     * dateDone stellt für jeden date dar, ob dieser done ist oder nicht, je nach subtask wird dieser resetet, oder der task gelöscht, wenn alle erledigt
+     *
+     *
      * TODO tasks im system speichern
      */
     protected String title;
     protected String description;
     protected LocalTime time;
     protected Boolean reminder;
-    public String TYPE;
+    protected Boolean[] dateDone;
 
     //super der Subclasses
     public Task(String title, String description, Boolean reminder, LocalTime time) {
