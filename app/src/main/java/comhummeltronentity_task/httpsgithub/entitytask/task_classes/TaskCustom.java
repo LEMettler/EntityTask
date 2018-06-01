@@ -29,8 +29,6 @@ public class TaskCustom extends Task {
         super(title, description, reminder, time);
 
         this.dates = dates;
-        //this.dateDone = new Boolean[dates.size()];
-        //Arrays.fill(dateDone,false);
     }
 
 
@@ -79,7 +77,6 @@ public class TaskCustom extends Task {
       parcel.writeByte((byte) (this.reminder ? 1 : 0)); //reminder(bool) -> byte (in parcel
       parcel.writeString(this.time.toString());         //time(LocalTime) -> string (in parcel)
       parcel.writeList(this.dates);     // macht vlcht probleme, dann liste ->string und dann probieren
-      //parcel.writeArray(dateDone);
     }
 
 }

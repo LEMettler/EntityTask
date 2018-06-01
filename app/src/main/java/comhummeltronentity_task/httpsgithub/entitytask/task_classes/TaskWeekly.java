@@ -36,8 +36,6 @@ public class TaskWeekly extends Task {
                 i++;
             }
         }
-        //dateDone = new Boolean[i];
-       // Arrays.fill(dateDone, false);
     }
 
     @Override
@@ -72,7 +70,6 @@ public class TaskWeekly extends Task {
         parcel.writeByte((byte) (this.reminder ? 1 : 0)); //reminder(bool) -> byte (in parcel
         parcel.writeString(this.time.toString());         //time(LocalTime) -> string (in parcel)
         parcel.writeArray(days);
-       // parcel.writeArray(dateDone);
 
     }
 
