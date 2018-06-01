@@ -42,6 +42,7 @@ public class TasksActivity extends AppCompatActivity {
         SectionsPageAdapter adapter = new SectionsPageAdapter(getSupportFragmentManager());
 
         for (Task t : taskStorage.getTasks()) {
+
             Bundle bundle = new Bundle();
             bundle.putParcelable("TASK", t);
             TaskviewFragment fragment = new TaskviewFragment();
@@ -49,6 +50,7 @@ public class TasksActivity extends AppCompatActivity {
 
             adapter.addFragment(fragment, t.getTitle());
         }
+
         viewPager.setAdapter(adapter);
     }
 
@@ -65,7 +67,7 @@ public class TasksActivity extends AppCompatActivity {
         item = getIntent().getExtras().getInt("ITEMINDEX");
 
         //Fragment aufsetzung des viewpagers
-        mSectionsPagerAdapter =new SectionsPageAdapter(getSupportFragmentManager());
+        //mSectionsPagerAdapter =new SectionsPageAdapter(getSupportFragmentManager());
         mViewPager = findViewById(R.id.container);
         setupViewPager(mViewPager);
         if (item >= 0){                                         //when a special itemindex was parced, it should be shown
@@ -103,9 +105,10 @@ public class TasksActivity extends AppCompatActivity {
             //if (resultCode == RESULT_OK) {
 
             taskStorage = data.getExtras().getParcelable("TASKSTORAGE");
+            //taskStorage = data.getParcelableExtra("TASKSTORAGE");
+            setupViewPager(mViewPager);
             //}
         }
-        setupViewPager(mViewPager);
     }
 
     @Override

@@ -8,7 +8,6 @@ import android.os.Parcelable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Created by Meerlu on 04.05.2018.
@@ -37,8 +36,8 @@ public class TaskWeekly extends Task {
                 i++;
             }
         }
-        dateDone = new Boolean[i];
-        Arrays.fill(dateDone, false);
+        //dateDone = new Boolean[i];
+       // Arrays.fill(dateDone, false);
     }
 
     @Override
@@ -73,7 +72,7 @@ public class TaskWeekly extends Task {
         parcel.writeByte((byte) (this.reminder ? 1 : 0)); //reminder(bool) -> byte (in parcel
         parcel.writeString(this.time.toString());         //time(LocalTime) -> string (in parcel)
         parcel.writeArray(days);
-        parcel.writeArray(dateDone);
+       // parcel.writeArray(dateDone);
 
     }
 

@@ -259,9 +259,9 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
         }
 
         //zurück zu taskactivity
-        Intent resultIntent = new Intent();
-        resultIntent.putExtra("TASKSTORAGE", taskStorage);
-        setResult(1, resultIntent);
+        //Intent resultIntent = new Intent();
+        //resultIntent.putExtra("TASKSTORAGE", taskStorage);
+        //setResult(1, resultIntent);
         finish();
     }
 

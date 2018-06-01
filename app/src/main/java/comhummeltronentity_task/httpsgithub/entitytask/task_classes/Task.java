@@ -22,7 +22,7 @@ public abstract class Task implements Parcelable {
     protected String description;
     protected LocalTime time;
     protected Boolean reminder;
-    protected Boolean[] dateDone;
+    //protected Boolean[] dateDone;
 
     //super der Subclasses
     public Task(String title, String description, Boolean reminder, LocalTime time) {
