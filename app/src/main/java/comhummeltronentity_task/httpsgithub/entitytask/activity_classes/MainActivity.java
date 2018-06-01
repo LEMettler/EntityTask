@@ -1,11 +1,21 @@
 package comhummeltronentity_task.httpsgithub.entitytask.activity_classes;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+
 import comhummeltronentity_task.httpsgithub.entitytask.R;
+import comhummeltronentity_task.httpsgithub.entitytask.activity_classes.mainactivity_support.ViewPagerAdapter;
+import comhummeltronentity_task.httpsgithub.entitytask.task_classes.Task;
+import comhummeltronentity_task.httpsgithub.entitytask.task_classes.TaskCustom;
+import comhummeltronentity_task.httpsgithub.entitytask.task_classes.TaskMonthly;
 import comhummeltronentity_task.httpsgithub.entitytask.task_classes.TaskStorage;
 
 
@@ -17,6 +27,7 @@ import comhummeltronentity_task.httpsgithub.entitytask.task_classes.TaskStorage;
 public class MainActivity extends AppCompatActivity {
     
     private TaskStorage taskStorage;
+    private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +35,41 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         //Erstellung des Taskspeicherobjekts
         taskStorage = new TaskStorage();
+        //erstellung des tasks today viewpager
+        viewPager = findViewById(R.id.viewPager);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            refreshViewPager();
+        }
+    }
+
+    //erstellen/erneuern  des viewpager auf basis des heutigen datum
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void refreshViewPager() {
+        LocalDate today = LocalDate.now();
+        ArrayList<Task> selectedTasks = new ArrayList<>();              //DONE tasks, spezifisch für ihren type anzeigen
+
+        for (Task t : taskStorage.getTasks()) {
+            if (t instanceof TaskMonthly) {
+                for (LocalDate d : t.getDates()) {
+                    if (d.getDayOfMonth() == today.getDayOfMonth()) { //checkt für jeden monthlytask jedes datum ob der tag passt
+                        selectedTasks.add(t);
+                        break;
+                    }
+                }
+            } else if (t instanceof TaskCustom) {
+                if (t.getDates().contains(today)) {
+                    selectedTasks.add(t);
+                }
+            } else {
+                if (t.getDates().contains(today)) {
+                    selectedTasks.add(t);
+                    //weekly                                    //todo anzeige von weekly anhand von days
+                }
+            }
+
+            ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this,selectedTasks);
+            viewPager.setAdapter(viewPagerAdapter);
+        }
     }
 
     //Link zu TaskActivity
@@ -31,6 +77,15 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, TasksActivity.class);
         intent.putExtra("TASKSTORAGE", taskStorage);    //Übergeben des Storage über Intent
         intent.putExtra("ITEMINDEX", -1);   //kein spezielles item, das angezeigt werde soll
+        startActivityForResult(intent, 1);
+    }
+
+    public void gotoSpecificTask(Task task) {
+        int itemIndex = taskStorage.getTasks().indexOf(task);
+
+        Intent intent = new Intent(this, TasksActivity.class);
+        intent.putExtra("TASKSTORAGE", taskStorage);    //Übergeben des Storage über Intent
+        intent.putExtra("ITEMINDEX", itemIndex);    //übergeben des index des clicked-task, der angezeigt werden soll
         startActivityForResult(intent, 1);
     }
 
@@ -48,7 +103,9 @@ public class MainActivity extends AppCompatActivity {
             // Make sure the request was successful
             //if (resultCode == RESULT_OK)
             taskStorage = data.getExtras().getParcelable("TASKSTORAGE");
-
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                refreshViewPager();
+            }
         }
     }
 }
