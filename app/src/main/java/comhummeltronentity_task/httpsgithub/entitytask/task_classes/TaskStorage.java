@@ -13,14 +13,15 @@ import java.util.ArrayList;
 /**
  * Ein Objekt dieser Klasse wird in Main erzeugt, und daraufhin jeder neuen Activitiy übergegeben
  * alle Activities mit Zugriff, können dadurch also -Tasks abrufen  -Tasks hinzufügen
- *
  */
-public class TaskStorage implements Parcelable{  
+public class TaskStorage implements Parcelable {
     //Hier liegen alle Tasks
     private ArrayList<Task> tasks;
+    private ArrayList<Boolean> taskState;
 
-    public TaskStorage(){
+    public TaskStorage() {
         tasks = new ArrayList<>();
+        taskState = new ArrayList<>();
     }
 
     //****************************************************************************************************
@@ -29,8 +30,9 @@ public class TaskStorage implements Parcelable{
         readFromParcel(in);
     }
 
-    private void readFromParcel(Parcel in){
+    private void readFromParcel(Parcel in) {
         tasks = in.readArrayList(Task.class.getClassLoader());
+        taskState = in.readArrayList(Boolean.class.getClassLoader());
         //in.readList( tasks,Task.class.getClassLoader());
     }
 
@@ -47,6 +49,7 @@ public class TaskStorage implements Parcelable{
     };
 
     @Override
+
     public int describeContents() {
         return 0;
     }
@@ -54,9 +57,10 @@ public class TaskStorage implements Parcelable{
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeList(tasks);
+        parcel.writeList(taskState);
     }
     //***********************************************************************************************
-    
+
     //Access für die Activities
     public ArrayList<Task> getTasks() {
         return tasks;
@@ -66,8 +70,20 @@ public class TaskStorage implements Parcelable{
         this.tasks = tasks;
     }
 
-    public void addTask(Task task){
+    public ArrayList<Boolean> getTaskState() {
+        return taskState;
+    }
+
+    public void setTaskState(ArrayList<Boolean> taskDone) {
+        this.taskState = taskDone;
+    }
+
+    public void setOneTaskState(int index, Boolean state){
+        taskState.set(index, state);
+    }
+
+    public void addTask(Task task) {
         tasks.add(task);
-        System.out.println("y");
+        taskState.add(false);
     }
 }

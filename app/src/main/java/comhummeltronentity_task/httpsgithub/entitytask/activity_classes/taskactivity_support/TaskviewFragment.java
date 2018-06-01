@@ -42,6 +42,7 @@ public class TaskviewFragment extends android.support.v4.app.Fragment {
         time = view.findViewById(R.id.txtTime);
         dates = view.findViewById(R.id.txtDates);
 
+
         //Task task = getArguments().getParcelable("TASK");
         Task task = (Task) getArguments().get("TASK");
         initialize(task);
