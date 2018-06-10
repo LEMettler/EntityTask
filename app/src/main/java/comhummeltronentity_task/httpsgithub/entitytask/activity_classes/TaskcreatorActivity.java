@@ -66,6 +66,9 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
     private EditText inputTitle;
     private EditText inputDescription;
 
+    private Task preTask;
+    private int preIndex;
+
 
     //Attribute zum Date/Time input
     private String inputTime;
@@ -97,13 +100,13 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
         taskStorage = getIntent().getExtras().getParcelable("TASKSTORAGE");
 
         //edit eines bestehenden tasks - setup
-        int i = getIntent().getExtras().getInt("EDITTASK");
-        if (i >= 0){
-            Task task = taskStorage.getTasks().get(i);
-            inputTitle.setText(task.getTitle());
-            inputDescription.setText(task.getDescription());
+        preIndex = (int) getIntent().getExtras().get("EDITTASK");
+        System.out.println(preIndex);
+        if (preIndex != -1) {
+            preTask = taskStorage.getTasks().get(preIndex);
+            inputTitle.setText(preTask.getTitle());
+            inputDescription.setText(preTask.getDescription());
         }
-
 
         //**************************************************************************************************************************************
         //**************************************************************************************************************************************
@@ -145,7 +148,8 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
             int month = c.get(Calendar.MONTH);
             int day = c.get(Calendar.DAY_OF_MONTH);
 
-            DatePickerDialog datePickerDialog = new DatePickerDialog(this, this, year, month, day);
+            //DatePickerDialog datePickerDialog = new DatePickerDialog(this, this, year, month, day);
+            DatePickerDialog datePickerDialog = new DatePickerDialog(this, R.style.DialogTheme, this, year, month, day );
             datePickerDialog.show();
         }else{
             /**
@@ -235,9 +239,13 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
             LocalTime timeFormat = LocalTime.parse(inputTime);
 
             TaskCustom newtask = new TaskCustom(title, description, reminder, timeFormat, datesFormat);
-          //  returnTask.putExtra("TASK", newtask);
-            taskStorage.addTask(newtask);
 
+            if (preIndex == -1) {
+                taskStorage.addTask(newtask);
+            } else {
+               taskStorage.getTasks().set(preIndex, newtask);
+            }
+//**************************************************************************************************
             //MonthlyTask
         }else if (rbtnMonthly.isChecked()) {
             ArrayList<LocalDate> datesFormat = new ArrayList<>();
@@ -247,9 +255,13 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
             LocalTime timeFormat = LocalTime.parse(inputTime);
 
             TaskMonthly newtask = new TaskMonthly(title, description, reminder, timeFormat, datesFormat);
-          //  returnTask.putExtra("TASK", newtask);
-            taskStorage.addTask(newtask);
 
+            if (preIndex == -1) {
+                taskStorage.addTask(newtask);
+            } else {
+                taskStorage.getTasks().set(preIndex, newtask);
+            }
+//**************************************************************************************************
             //WeeklyTask                        //TODO weekly tasks erstellen
         }else{
             /**
@@ -259,9 +271,6 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
         }
 
         //zurück zu taskactivity
-        //Intent resultIntent = new Intent();
-        //resultIntent.putExtra("TASKSTORAGE", taskStorage);
-        //setResult(1, resultIntent);
         finish();
     }
 

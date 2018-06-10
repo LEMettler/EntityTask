@@ -42,7 +42,6 @@ public class TasksActivity extends AppCompatActivity {
         SectionsPageAdapter adapter = new SectionsPageAdapter(getSupportFragmentManager());
 
         for (Task t : taskStorage.getTasks()) {
-
             Bundle bundle = new Bundle();
             bundle.putParcelable("TASK", t);
             TaskviewFragment fragment = new TaskviewFragment();
@@ -50,7 +49,6 @@ public class TasksActivity extends AppCompatActivity {
 
             adapter.addFragment(fragment, t.getTitle());
         }
-
         viewPager.setAdapter(adapter);
     }
 
@@ -106,9 +104,9 @@ public class TasksActivity extends AppCompatActivity {
 
             taskStorage = data.getExtras().getParcelable("TASKSTORAGE");
             //taskStorage = data.getParcelableExtra("TASKSTORAGE");
-            setupViewPager(mViewPager);
             //}
         }
+        setupViewPager(mViewPager);
     }
 
     @Override
@@ -143,8 +141,6 @@ public class TasksActivity extends AppCompatActivity {
         if (!taskStorage.getTasks().isEmpty()) {
             if (id == R.id.action_delete) {
                 deleteDialog();                         //todo refresh nachdem ein task deletet wurde
-                //setupViewPager(mViewPager);
-
             }else if (id == R.id.action_edit){
                 editDialog();
             }
@@ -152,13 +148,13 @@ public class TasksActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    //todo call taskceator after an dialog and parse the existing data
+    //DONE call taskceator after an dialog and parse the existing data
     private void editDialog(){
         final Context context = this;
 
         new AlertDialog.Builder(this)
                 .setTitle((CharSequence) taskStorage.getTasks().get(mViewPager.getCurrentItem()).getTitle())    //vom viewpager kann der angesehene taskindex gepullt werden, aber weil java
-                .setMessage("Edit?")                                                                            //inkongruent ist -> X -1
+                .setMessage("Edit?")
                 .setNegativeButton("No", null)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
@@ -167,26 +163,25 @@ public class TasksActivity extends AppCompatActivity {
                         Intent intent = new Intent(context, TaskcreatorActivity.class);
                         intent.putExtra("TASKSTORAGE", taskStorage);                    //übergabe des taskSotrage
                         intent.putExtra("EDITTASK", mViewPager.getCurrentItem());       //übergabe des task-indexes, das geeditet werden soll
-                        taskStorage.getTasks().remove(mViewPager.getCurrentItem());
+
                         startActivityForResult(intent, 1); //1 == successful
                         setupViewPager(mViewPager);
                     }
                 }).create().show();
-        //setupViewPager(mViewPager);
     }
 
     //todo delete funktioniert noch nicht so 100%, geliches prob, wie edit
     //erstellt einen dialog zum deleten des tasks X
     private void deleteDialog(){
-        new AlertDialog.Builder(this)                           //vom viewpager kann der angesehene taskindex gepullt werden, aber weil java
-                .setTitle((CharSequence) taskStorage.getTasks().get(mViewPager.getCurrentItem()).getTitle())    //inkongruent ist -> X -1
+        new AlertDialog.Builder(this)                           //vom viewpager kann der angesehene taskindex gepullt werden
+                .setTitle((CharSequence) taskStorage.getTasks().get(mViewPager.getCurrentItem()).getTitle())
                 .setMessage("Delete?")
                 .setNegativeButton("No", null)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        taskStorage.getTasks().remove(mViewPager.getCurrentItem());
-                        setupViewPager(mViewPager);
+                        int index = mViewPager.getCurrentItem();
+                        taskStorage.getTasks().remove(index);
                     }
                 }).create().show();
     }
