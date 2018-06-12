@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.time.LocalDate;
@@ -35,15 +37,21 @@ public class MainActivity extends AppCompatActivity {
     private TaskStorage taskStorage;
     private ViewPager viewPager;
 
+    private ProgressBar progressBar;
     private ImageView viewLogo;
+    private TextView txtLevel;
     private Animation rotateAnimation;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Erstellung des Taskspeicherobjekts
+        taskStorage = new TaskStorage();
 
+        //logo
         final Context context = this;
         viewLogo = findViewById(R.id.viewLogo);
         viewLogo.setClickable(true);
@@ -55,8 +63,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //Erstellung des Taskspeicherobjekts
-        taskStorage = new TaskStorage();
+        //progressbar
+        progressBar = findViewById(R.id.progressBar);
+        progressBar.setMin(0);
+        progressBar.setMax(100);
+        progressBar.setProgress(0);
+
+        //level-text
+        txtLevel = findViewById(R.id.txtLevel);
+        int level = taskStorage.profile.getLevel();
+        txtLevel.setText("Level: " + level);
+
         //erstellung des tasks today viewpager
         viewPager = findViewById(R.id.viewPager);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -140,6 +157,16 @@ public class MainActivity extends AppCompatActivity {
         toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 250);
         toast.show();
         refreshViewPager();
+
+        taskStorage.profile.increasePoints(20);
+        updateProgress();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void updateProgress(){
+        progressBar.setProgress(taskStorage.profile.getPoints(), true);
+        int level = taskStorage.profile.getLevel();
+        txtLevel.setText("Level: " + level);
     }
 
     @Override
@@ -151,6 +178,7 @@ public class MainActivity extends AppCompatActivity {
             taskStorage = data.getExtras().getParcelable("TASKSTORAGE");
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 refreshViewPager();
+                updateProgress();
             }
         }
     }

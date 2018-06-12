@@ -1,5 +1,8 @@
 package comhummeltronentity_task.httpsgithub.entitytask.activity_classes;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by Meerlu on 12.06.2018.
  *
@@ -11,7 +14,7 @@ package comhummeltronentity_task.httpsgithub.entitytask.activity_classes;
  * TODO INTERACT WITH TASKS
  */
 
-public class Profile {
+public class Profile implements Parcelable{
 
     //public static final int MAX_LEVEL = 100;
     public static final int POINT_LIMIT = 100;
@@ -25,7 +28,7 @@ public class Profile {
     }
 
     public void increasePoints(int xp){
-        this.points += points;
+        this.points += xp;
         checkPoints();
     }
 
@@ -51,5 +54,35 @@ public class Profile {
 
     public void setLevel(int level) {
         this.level = level;
+    }
+
+    //****************************************************************************************************
+    //Parcelable-Methoden, benötigt um Objekte zwischen Aktivites zu übergeben
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    protected Profile(Parcel in) {
+        points = in.readInt();
+        level = in.readInt();
+    }
+
+    public static final Creator<Profile> CREATOR = new Creator<Profile>() {
+        @Override
+        public Profile createFromParcel(Parcel in) {
+            return new Profile(in);
+        }
+
+        @Override
+        public Profile[] newArray(int size) {
+            return new Profile[size];
+        }
+    };
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(points);
+        parcel.writeInt(level);
     }
 }

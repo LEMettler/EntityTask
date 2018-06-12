@@ -143,6 +143,8 @@ public class CalendarActivity extends AppCompatActivity {
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();
         refreshViewPager();
+
+        taskStorage.profile.increasePoints(20);
     }
 
     @Override

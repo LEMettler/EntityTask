@@ -10,6 +10,7 @@ import android.os.Parcelable;
 
 import java.util.ArrayList;
 
+import comhummeltronentity_task.httpsgithub.entitytask.activity_classes.Profile;
 import comhummeltronentity_task.httpsgithub.entitytask.task_classes.Task;
 
 /**
@@ -21,10 +22,12 @@ public class TaskStorage implements Parcelable {
     private ArrayList<Task> tasks;
     private ArrayList<Boolean> taskState;
 
+    public Profile profile;
 
     public TaskStorage() {
         tasks = new ArrayList<>();
         taskState = new ArrayList<>();
+        profile = new Profile();
     }
 
     //****************************************************************************************************
@@ -37,6 +40,7 @@ public class TaskStorage implements Parcelable {
         tasks = in.readArrayList(Task.class.getClassLoader());
         taskState = in.readArrayList(Boolean.class.getClassLoader());
         //in.readList( tasks,Task.class.getClassLoader());
+        profile = in.readParcelable(Profile.class.getClassLoader());
     }
 
     public static final Creator<TaskStorage> CREATOR = new Creator<TaskStorage>() {
@@ -61,6 +65,7 @@ public class TaskStorage implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeList(tasks);
         parcel.writeList(taskState);
+        parcel.writeParcelable(profile, i);
     }
     //***********************************************************************************************
 
