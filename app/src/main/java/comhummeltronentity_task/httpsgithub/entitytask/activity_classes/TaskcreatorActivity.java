@@ -26,7 +26,7 @@ import comhummeltronentity_task.httpsgithub.entitytask.R;
 import comhummeltronentity_task.httpsgithub.entitytask.task_classes.Task;
 import comhummeltronentity_task.httpsgithub.entitytask.task_classes.TaskCustom;
 import comhummeltronentity_task.httpsgithub.entitytask.task_classes.TaskMonthly;
-import comhummeltronentity_task.httpsgithub.entitytask.task_classes.TaskStorage;
+import comhummeltronentity_task.httpsgithub.entitytask.TaskStorage;
 
 /**
 * Hier werden die einzelnen Tasks erzeugt
@@ -34,6 +34,7 @@ import comhummeltronentity_task.httpsgithub.entitytask.task_classes.TaskStorage;
  *
  * TODO reminderfunktion in tasks einbauen, ist ne seperate geschichte, wird über solche push notifications geregelt
  * TODO ist eine zeit bereits gewählt sollte diese noch nachträglich änderbar sein
+ * TODO gleiches datumano sollte nicht mehrmals ausgewählt werden können;
  * (siehe https://www.youtube.com/watch?v=SWsuijO5NGE)
  *DONE wenn kein datum (auch zeit?) ausgewählt, soll der task nicht erstellt werden können
  *
@@ -166,7 +167,7 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
         int month = c.get(Calendar.MONTH);
         int day = c.get(Calendar.DAY_OF_MONTH);
 
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this, this, year, month, day);
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, R.style.DialogTheme, this, year, month, day );
         datePickerDialog.show();
 
         txtInputDate.setText(txtInputDate.getText() + ", " + dates.get(dates.size() - 1));
@@ -193,7 +194,7 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
            Calendar c = Calendar.getInstance();
            int hour = c.get(Calendar.HOUR_OF_DAY);
            int minute = c.get(Calendar.MINUTE);
-           TimePickerDialog timePickerDialog = new TimePickerDialog(this, this, hour, minute, true);
+           TimePickerDialog timePickerDialog = new TimePickerDialog(this, R.style.DialogTheme,this, hour, minute, true);
            timePickerDialog.show();
        }
     }

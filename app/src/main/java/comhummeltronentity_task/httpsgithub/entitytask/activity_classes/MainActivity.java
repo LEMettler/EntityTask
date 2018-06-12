@@ -19,7 +19,7 @@ import comhummeltronentity_task.httpsgithub.entitytask.activity_classes.mainacti
 import comhummeltronentity_task.httpsgithub.entitytask.task_classes.Task;
 import comhummeltronentity_task.httpsgithub.entitytask.task_classes.TaskCustom;
 import comhummeltronentity_task.httpsgithub.entitytask.task_classes.TaskMonthly;
-import comhummeltronentity_task.httpsgithub.entitytask.task_classes.TaskStorage;
+import comhummeltronentity_task.httpsgithub.entitytask.TaskStorage;
 
 
 /**

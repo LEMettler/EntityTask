@@ -17,7 +17,7 @@ import comhummeltronentity_task.httpsgithub.entitytask.R;
 import comhummeltronentity_task.httpsgithub.entitytask.activity_classes.taskactivity_support.SectionsPageAdapter;
 import comhummeltronentity_task.httpsgithub.entitytask.activity_classes.taskactivity_support.TaskviewFragment;
 import comhummeltronentity_task.httpsgithub.entitytask.task_classes.Task;
-import comhummeltronentity_task.httpsgithub.entitytask.task_classes.TaskStorage;
+import comhummeltronentity_task.httpsgithub.entitytask.TaskStorage;
 
 public class TasksActivity extends AppCompatActivity {
     /**

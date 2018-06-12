@@ -1,4 +1,4 @@
-package comhummeltronentity_task.httpsgithub.entitytask.task_classes;
+package comhummeltronentity_task.httpsgithub.entitytask;
 
 /**
  * Created by Meerlu on 08.05.2018.
@@ -10,6 +10,8 @@ import android.os.Parcelable;
 
 import java.util.ArrayList;
 
+import comhummeltronentity_task.httpsgithub.entitytask.task_classes.Task;
+
 /**
  * Ein Objekt dieser Klasse wird in Main erzeugt, und daraufhin jeder neuen Activitiy übergegeben
  * alle Activities mit Zugriff, können dadurch also -Tasks abrufen  -Tasks hinzufügen
@@ -18,6 +20,7 @@ public class TaskStorage implements Parcelable {
     //Hier liegen alle Tasks
     private ArrayList<Task> tasks;
     private ArrayList<Boolean> taskState;
+
 
     public TaskStorage() {
         tasks = new ArrayList<>();
