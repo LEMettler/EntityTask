@@ -9,6 +9,9 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.time.LocalDate;
@@ -32,10 +35,26 @@ public class MainActivity extends AppCompatActivity {
     private TaskStorage taskStorage;
     private ViewPager viewPager;
 
+    private ImageView viewLogo;
+    private Animation rotateAnimation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        final Context context = this;
+        viewLogo = findViewById(R.id.viewLogo);
+        viewLogo.setClickable(true);
+        viewLogo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                rotateAnimation = AnimationUtils.loadAnimation(context,R.anim.rotate);
+                viewLogo.startAnimation(rotateAnimation);
+            }
+        });
+
         //Erstellung des Taskspeicherobjekts
         taskStorage = new TaskStorage();
         //erstellung des tasks today viewpager
