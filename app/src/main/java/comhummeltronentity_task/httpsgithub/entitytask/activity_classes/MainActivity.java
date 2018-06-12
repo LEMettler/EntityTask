@@ -1,12 +1,15 @@
 package comhummeltronentity_task.httpsgithub.entitytask.activity_classes;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.Toast;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -49,25 +52,29 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<Task> selectedTasks = new ArrayList<>();              //DONE tasks, spezifisch für ihren type anzeigen
 
         for (Task t : taskStorage.getTasks()) {
-            if (t instanceof TaskMonthly) {
-                for (LocalDate d : t.getDates()) {
-                    if (d.getDayOfMonth() == today.getDayOfMonth()) { //checkt für jeden monthlytask jedes datum ob der tag passt
+
+            int i = taskStorage.getTasks().indexOf(t);
+            if (!taskStorage.getOneTaskState(i)) {
+
+                if (t instanceof TaskMonthly) {
+                    for (LocalDate d : t.getDates()) {
+                        if (d.getDayOfMonth() == today.getDayOfMonth()) { //checkt für jeden monthlytask jedes datum ob der tag passt
+                            selectedTasks.add(t);
+                            break;
+                        }
+                    }
+                } else if (t instanceof TaskCustom) {
+                    if (t.getDates().contains(today)) {
                         selectedTasks.add(t);
-                        break;
+                    }
+                } else {
+                    if (t.getDates().contains(today)) {
+                        selectedTasks.add(t);
+                        //weekly                                    //todo anzeige von weekly anhand von days
                     }
                 }
-            } else if (t instanceof TaskCustom) {
-                if (t.getDates().contains(today)) {
-                    selectedTasks.add(t);
-                }
-            } else {
-                if (t.getDates().contains(today)) {
-                    selectedTasks.add(t);
-                    //weekly                                    //todo anzeige von weekly anhand von days
-                }
             }
-
-            ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this,selectedTasks);
+            ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this, selectedTasks);
             viewPager.setAdapter(viewPagerAdapter);
         }
     }
@@ -94,6 +101,26 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, CalendarActivity.class);
         intent.putExtra("TASKSTORAGE", taskStorage);    //Übergeben des Storage über Intent
         startActivityForResult(intent, 1);
+    }
+
+
+    //der viewpager ruft diese methode auf um einen task zu erledigen
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void setTaskDone(ArrayList<Task> selectedTasks, int position){
+        Task t = selectedTasks.get(position);
+        int i = taskStorage.getTasks().indexOf(t);
+
+        taskStorage.setOneTaskState(i, true);
+
+        //toasts sind kleine Einbeldungen, die kurzes Feedback geben
+        Context context = getApplicationContext();
+        CharSequence text = t.getTitle() + " is Done!";
+        int duration = Toast.LENGTH_SHORT;
+
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 250);
+        toast.show();
+        refreshViewPager();
     }
 
     @Override

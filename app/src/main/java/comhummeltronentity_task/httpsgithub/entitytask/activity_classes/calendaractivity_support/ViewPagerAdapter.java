@@ -30,6 +30,7 @@ public class ViewPagerAdapter extends PagerAdapter {
     private Context context;
     private LayoutInflater layoutInflater;
     private ArrayList<Task> taskList;
+
     private CalendarActivity calendar;
 
 
@@ -65,7 +66,8 @@ public class ViewPagerAdapter extends PagerAdapter {
             btnDone.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //TODO hier code um task done zu setzen
+                    calendar.setTaskDone(taskList, position);
+                    //DONE hier code um task done zu setzen
                 }
             });
 

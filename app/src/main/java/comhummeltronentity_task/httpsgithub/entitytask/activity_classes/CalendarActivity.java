@@ -1,5 +1,6 @@
 package comhummeltronentity_task.httpsgithub.entitytask.activity_classes;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.CalendarView;
+import android.widget.Toast;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -77,7 +79,6 @@ public class CalendarActivity extends AppCompatActivity {
         startActivityForResult(intent, 1);
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Check which request we're responding to
@@ -96,42 +97,62 @@ public class CalendarActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void refreshViewPager() {
 
-        ArrayList<Task> selectedTasks = new ArrayList<>();              //TODO tasks, spezifisch für ihren type anzeigen
+        ArrayList<Task> selectedTasks = new ArrayList<>();              //DONE tasks, spezifisch für ihren type anzeigen
 
         for (Task t : taskStorage.getTasks()) {
-            if (t instanceof TaskMonthly) {
-                for (LocalDate d : t.getDates()) {
-                    if (d.getDayOfMonth() == selectedDate.getDayOfMonth()) { //checkt für jeden monthlytask jedes datum ob der tag passt
+
+            int i = taskStorage.getTasks().indexOf(t);
+            if (!taskStorage.getOneTaskState(i)) {
+
+                if (t instanceof TaskMonthly) {
+                    for (LocalDate d : t.getDates()) {
+                        if (d.getDayOfMonth() == selectedDate.getDayOfMonth()) { //checkt für jeden monthlytask jedes datum ob der tag passt
+                            selectedTasks.add(t);
+                            break;
+                        }
+                    }
+                } else if (t instanceof TaskCustom) {
+                    if (t.getDates().contains(selectedDate)) {
                         selectedTasks.add(t);
-                        break;
+                    }
+                } else {
+                    if (t.getDates().contains(selectedDate)) {
+                        selectedTasks.add(t);
+                        //weekly                                    //todo anzeige von weekly anhand von days
                     }
                 }
-            } else if (t instanceof TaskCustom) {
-                if (t.getDates().contains(selectedDate)) {
-                    selectedTasks.add(t);
-                }
-            } else {
-                if (t.getDates().contains(selectedDate)) {
-                    selectedTasks.add(t);
-                    //weekly                                    //todo anzeige von weekly anhand von days
-                }
             }
-
             ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this, selectedTasks);
             viewPager.setAdapter(viewPagerAdapter);
         }
     }
 
+    //der viewpager ruft diese methode auf um einen task zu erledigen
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void setTaskDone(ArrayList<Task> selectedTasks, int position){
+        Task t = selectedTasks.get(position);
+        int i = taskStorage.getTasks().indexOf(t);
 
+        taskStorage.setOneTaskState(i, true);
 
-        @Override
-        public void finish() {
-            //rückgabe des taskstorage an mainactivity
-            Intent resultIntent = new Intent();
-            resultIntent.putExtra("TASKSTORAGE", taskStorage);
-            setResult(1, resultIntent);
+        //toasts sind kleine Einbeldungen, die kurzes Feedback geben
+        Context context = getApplicationContext();
+        CharSequence text = t.getTitle() + " is Done!";
+        int duration = Toast.LENGTH_SHORT;
 
-            super.finish();
-        }
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.show();
+        refreshViewPager();
     }
+
+    @Override
+    public void finish() {
+        //rückgabe des taskstorage an mainactivity
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra("TASKSTORAGE", taskStorage);
+        setResult(1, resultIntent);
+
+        super.finish();
+    }
+}
 

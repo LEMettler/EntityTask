@@ -74,6 +74,11 @@ public class TaskStorage implements Parcelable {
         return taskState;
     }
 
+    public Boolean getOneTaskState(int i){
+
+        return taskState.get(i);
+    }
+
     public void setTaskState(ArrayList<Boolean> taskDone) {
         this.taskState = taskDone;
     }

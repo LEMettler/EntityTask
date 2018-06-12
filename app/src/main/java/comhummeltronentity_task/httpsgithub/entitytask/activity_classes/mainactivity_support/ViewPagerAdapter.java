@@ -6,6 +6,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -58,6 +59,15 @@ public class ViewPagerAdapter extends PagerAdapter {
             TextView txtTitle = view.findViewById(R.id.txtTitle);
             String title = taskList.get(position).getTitle();     //genau das nochmal nur für description, wenn wir noch ne description wollen
             txtTitle.setText(title);                              // + xml file
+
+        Button btnDone = view.findViewById(R.id.btnDone);
+        btnDone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                main.setTaskDone(taskList, position);
+                //DONE hier code um task done zu setzen
+            }
+        });
 
             ViewPager viewPager = (ViewPager) container;
             viewPager.addView(view, 0);

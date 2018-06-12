@@ -55,7 +55,7 @@ public class TaskviewFragment extends android.support.v4.app.Fragment {
             dates.setText("");
             for (LocalDate d : task.getDates()){
                 dates.setText(dates.getText()  + d.toString() + ", ");
-            }                                                            //todo, zeigt bisher nur 1 date und keine tage für weekly
+            }                                                            //todo, tage für weekly und komma richtig setzen
         } else if (task instanceof TaskMonthly) {
             dates.setText("");
             for (LocalDate d : task.getDates()){
