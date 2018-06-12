@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private ImageView viewLogo;
     private TextView txtLevel;
+    private TextView txtToday;
     private Animation rotateAnimation;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -51,15 +52,26 @@ public class MainActivity extends AppCompatActivity {
         //Erstellung des Taskspeicherobjekts
         taskStorage = new TaskStorage();
 
+        //txt-today
+        txtToday = findViewById(R.id.txtToday);
+
         //logo
         final Context context = this;
         viewLogo = findViewById(R.id.viewLogo);
         viewLogo.setClickable(true);
         viewLogo.setOnClickListener(new View.OnClickListener() {
-            @Override
+            @Override                                               //click auf logo wechselt ob today sichbar ist
             public void onClick(View view) {
                 rotateAnimation = AnimationUtils.loadAnimation(context,R.anim.rotate);
                 viewLogo.startAnimation(rotateAnimation);
+
+                if (viewPager.getVisibility() == View.VISIBLE){
+                    viewPager.setVisibility(View.GONE);
+                    txtToday.setVisibility(View.GONE);
+                }else{
+                    viewPager.setVisibility(View.VISIBLE);
+                    txtToday.setVisibility(View.VISIBLE);
+                }
             }
         });
 
