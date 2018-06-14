@@ -18,7 +18,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
-import comhummeltronentity_task.httpsgithub.entitytask.activity_classes.Profile;
 import comhummeltronentity_task.httpsgithub.entitytask.task_classes.Task;
 
 /**
@@ -78,11 +77,58 @@ public class TaskStorage implements Parcelable {
     //***********************************************************************************************
 
     /**
-     *
      * TEST TO SAVE ALL TASKS TO A TEXTFILE
      */
 
-    public void saveTasksToFile(Context context) throws IOException {
+    public void saveProfileToFile(Context context) {
+        ObjectOutputStream outputStream = null;
+
+        String file_name = "profile_data.txt";
+
+        String file_path = context.getFilesDir().toString();
+        File file = new File(file_path, file_name);
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            outputStream = new ObjectOutputStream(new FileOutputStream(file));
+            outputStream.writeObject(profile);
+            outputStream.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void readProfileFromFile(Context context){
+        ObjectInputStream inputStream;
+
+        String file_name = "profile_data.txt";
+        String file_path = context.getFilesDir().toString();
+        File file = new File(file_path, file_name);
+
+        if (file.exists()){
+
+            try {
+
+                inputStream = new ObjectInputStream(new FileInputStream(file));
+                profile = (Profile) inputStream.readObject();
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void saveTasksToFile(Context context) {
 
         ObjectOutputStream outputStream = null;
 
@@ -90,7 +136,11 @@ public class TaskStorage implements Parcelable {
 
         String tasks_file_path = context.getFilesDir().toString();
         File tasks_file = new File(tasks_file_path, tasks_file_name);
-        tasks_file.createNewFile();
+        try {
+            tasks_file.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         try {
              outputStream = new ObjectOutputStream(new FileOutputStream(tasks_file));
@@ -102,12 +152,18 @@ public class TaskStorage implements Parcelable {
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         String state_file_name = "state_data.txt";
         String state_file_path = context.getFilesDir().toString();
         File state_file = new File(state_file_path, state_file_name);
-        state_file.createNewFile();
+        try {
+            state_file.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         try {
              outputStream = new ObjectOutputStream(new FileOutputStream(state_file));
 
@@ -118,8 +174,14 @@ public class TaskStorage implements Parcelable {
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        outputStream.close();
+        try {
+            outputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void readTasksFromFile(Context context) {

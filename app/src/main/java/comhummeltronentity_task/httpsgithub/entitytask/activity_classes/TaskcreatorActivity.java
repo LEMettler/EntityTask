@@ -17,7 +17,6 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -273,12 +272,14 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
         }
 
         //zurück zu taskactivity
-        try {
-            taskStorage.saveTasksToFile(this);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        taskStorage.saveTasksToFile(this);
         finish();
+    }
+
+    @Override
+    protected void onStop() {
+        taskStorage.saveProfileToFile(this);
+        super.onStop();
     }
 
 
@@ -297,5 +298,6 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
 
         super.finish();
     }
+
 
 }

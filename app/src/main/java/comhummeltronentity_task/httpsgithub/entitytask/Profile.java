@@ -1,7 +1,9 @@
-package comhummeltronentity_task.httpsgithub.entitytask.activity_classes;
+package comhummeltronentity_task.httpsgithub.entitytask;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import java.io.Serializable;
 
 /**
  * Created by Meerlu on 12.06.2018.
@@ -14,7 +16,7 @@ import android.os.Parcelable;
  * TODO INTERACT WITH TASKS
  */
 
-public class Profile implements Parcelable{
+public class Profile implements Parcelable, Serializable{
 
     //public static final int MAX_LEVEL = 100;
     public static final int POINT_LIMIT = 100;

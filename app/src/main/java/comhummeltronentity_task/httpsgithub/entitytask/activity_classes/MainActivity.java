@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         //Erstellung des Taskspeicherobjekts
         taskStorage = new TaskStorage();
         taskStorage.readTasksFromFile(this);
+        taskStorage.readProfileFromFile(this);
 
         //txt-today
         txtToday = findViewById(R.id.txtToday);
@@ -80,7 +81,8 @@ public class MainActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         progressBar.setMin(0);
         progressBar.setMax(100);
-        progressBar.setProgress(0);
+        progressBar.setProgress(taskStorage.profile.getPoints());
+
 
         //level-text
         txtLevel = findViewById(R.id.txtLevel);
@@ -92,6 +94,12 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             refreshViewPager();
         }
+    }
+
+    @Override
+    protected void onStop() {
+        taskStorage.saveProfileToFile(this);
+        super.onStop();
     }
 
     //erstellen/erneuern  des viewpager auf basis des heutigen datum

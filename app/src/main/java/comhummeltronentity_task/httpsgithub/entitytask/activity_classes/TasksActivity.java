@@ -13,13 +13,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import java.io.IOException;
-
 import comhummeltronentity_task.httpsgithub.entitytask.R;
+import comhummeltronentity_task.httpsgithub.entitytask.TaskStorage;
 import comhummeltronentity_task.httpsgithub.entitytask.activity_classes.taskactivity_support.SectionsPageAdapter;
 import comhummeltronentity_task.httpsgithub.entitytask.activity_classes.taskactivity_support.TaskviewFragment;
 import comhummeltronentity_task.httpsgithub.entitytask.task_classes.Task;
-import comhummeltronentity_task.httpsgithub.entitytask.TaskStorage;
 
 public class TasksActivity extends AppCompatActivity {
     /**
@@ -185,13 +183,15 @@ public class TasksActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         int index = mViewPager.getCurrentItem();
                         taskStorage.getTasks().remove(index);
-                        try {
-                            taskStorage.saveTasksToFile(context);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        taskStorage.saveTasksToFile(context);
                     }
                 }).create().show();
+    }
+
+    @Override
+    protected void onStop() {
+        taskStorage.saveProfileToFile(this);
+        super.onStop();
     }
 }
 

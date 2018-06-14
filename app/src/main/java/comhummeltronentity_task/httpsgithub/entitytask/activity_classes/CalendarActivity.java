@@ -156,5 +156,11 @@ public class CalendarActivity extends AppCompatActivity {
 
         super.finish();
     }
+
+    @Override
+    protected void onStop() {
+        taskStorage.saveProfileToFile(this);
+        super.onStop();
+    }
 }
 
