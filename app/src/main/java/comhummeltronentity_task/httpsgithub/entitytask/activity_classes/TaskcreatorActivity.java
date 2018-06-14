@@ -17,16 +17,17 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 
 import comhummeltronentity_task.httpsgithub.entitytask.R;
+import comhummeltronentity_task.httpsgithub.entitytask.TaskStorage;
 import comhummeltronentity_task.httpsgithub.entitytask.task_classes.Task;
 import comhummeltronentity_task.httpsgithub.entitytask.task_classes.TaskCustom;
 import comhummeltronentity_task.httpsgithub.entitytask.task_classes.TaskMonthly;
-import comhummeltronentity_task.httpsgithub.entitytask.TaskStorage;
 
 /**
 * Hier werden die einzelnen Tasks erzeugt
@@ -272,6 +273,11 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
         }
 
         //zurück zu taskactivity
+        try {
+            taskStorage.saveTasksToFile(this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         finish();
     }
 
@@ -284,6 +290,7 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
     @Override
     public void finish() {
         //rückgabe des taskstorage an taskactivity (auch ohne änderung oder sinn , nur für guten codeflow)
+
         Intent resultIntent = new Intent();
         resultIntent.putExtra("TASKSTORAGE", taskStorage);
         setResult(1, resultIntent);

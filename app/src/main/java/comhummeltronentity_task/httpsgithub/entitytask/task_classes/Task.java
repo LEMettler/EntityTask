@@ -2,6 +2,7 @@ package comhummeltronentity_task.httpsgithub.entitytask.task_classes;
 
 import android.os.Parcelable;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
  * Created by Meerlu on 03.05.2018.
  */
 
-public abstract class Task implements Parcelable {
+public abstract class Task implements Parcelable, Serializable {
     /**
      * Blueprint für alle spezifischen Tasks
      * dateDone stellt für jeden date dar, ob dieser done ist oder nicht, je nach subtask wird dieser resetet, oder der task gelöscht, wenn alle erledigt

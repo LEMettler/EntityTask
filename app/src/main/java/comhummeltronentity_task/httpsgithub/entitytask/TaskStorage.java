@@ -5,9 +5,17 @@ package comhummeltronentity_task.httpsgithub.entitytask;
  */
 
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import comhummeltronentity_task.httpsgithub.entitytask.activity_classes.Profile;
@@ -68,6 +76,110 @@ public class TaskStorage implements Parcelable {
         parcel.writeParcelable(profile, i);
     }
     //***********************************************************************************************
+
+    /**
+     *
+     * TEST TO SAVE ALL TASKS TO A TEXTFILE
+     */
+
+    public void saveTasksToFile(Context context) throws IOException {
+
+        String tasks_file_name = "tasks_data.txt";
+
+        String tasks_file_path = context.getFilesDir().toString();
+        File tasks_file = new File(tasks_file_path, tasks_file_name);
+        tasks_file.createNewFile();
+
+        try {
+            ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(tasks_file));
+
+            for ( Task task : tasks ) {
+                outputStream.writeObject(task);
+            }
+            outputStream.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        String state_file_name = "state_data.txt";
+        String state_file_path = context.getFilesDir().toString();
+        File state_file = new File(state_file_path, state_file_name);
+        state_file.createNewFile();
+        try {
+            ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(state_file));
+
+            for ( Boolean b : taskState ) {
+                outputStream.writeObject(b);
+            }
+            outputStream.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void readTasksFromFile(Context context) {
+
+        String tasks_file_name = "tasks_data.txt";
+        String tasks_file_path = context.getFilesDir().toString();
+        File tasks_file = new File(tasks_file_path, tasks_file_name);
+
+        if (tasks_file.exists()){
+
+        try {
+            ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(tasks_file));
+            boolean cont = true;
+            while (cont) {
+                Task task = (Task) inputStream.readObject();
+                if (task != null) {
+                    tasks.add(task);
+                } else {
+                    cont = false;
+                }
+                inputStream.close();
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        }
+
+        String state_file_name = "state_data.txt";
+        String state_file_path = context.getFilesDir().toString();
+        File state_file = new File(state_file_path, state_file_name);
+
+        if (state_file.exists()){
+
+            try {
+                ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(state_file));
+                boolean cont = true;
+                while (cont) {
+                    Boolean b = (Boolean) inputStream.readObject();
+                    if (b != null) {
+                        taskState.add(b);
+                    } else {
+                        cont = false;
+                    }
+                    inputStream.close();
+                }
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+        /**
+     *
+     *
+     */
 
     //Access für die Activities
     public ArrayList<Task> getTasks() {

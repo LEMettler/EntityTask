@@ -13,6 +13,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import java.io.IOException;
+
 import comhummeltronentity_task.httpsgithub.entitytask.R;
 import comhummeltronentity_task.httpsgithub.entitytask.activity_classes.taskactivity_support.SectionsPageAdapter;
 import comhummeltronentity_task.httpsgithub.entitytask.activity_classes.taskactivity_support.TaskviewFragment;
@@ -173,6 +175,7 @@ public class TasksActivity extends AppCompatActivity {
     //todo delete funktioniert noch nicht so 100%, geliches prob, wie edit
     //erstellt einen dialog zum deleten des tasks X
     private void deleteDialog(){
+        final Context context = this;
         new AlertDialog.Builder(this)                           //vom viewpager kann der angesehene taskindex gepullt werden
                 .setTitle((CharSequence) taskStorage.getTasks().get(mViewPager.getCurrentItem()).getTitle())
                 .setMessage("Delete?")
@@ -182,6 +185,11 @@ public class TasksActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         int index = mViewPager.getCurrentItem();
                         taskStorage.getTasks().remove(index);
+                        try {
+                            taskStorage.saveTasksToFile(context);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }).create().show();
     }

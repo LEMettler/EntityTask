@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Erstellung des Taskspeicherobjekts
         taskStorage = new TaskStorage();
+        taskStorage.readTasksFromFile(this);
 
         //txt-today
         txtToday = findViewById(R.id.txtToday);
