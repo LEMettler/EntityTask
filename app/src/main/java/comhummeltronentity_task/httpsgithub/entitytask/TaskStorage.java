@@ -84,6 +84,8 @@ public class TaskStorage implements Parcelable {
 
     public void saveTasksToFile(Context context) throws IOException {
 
+        ObjectOutputStream outputStream = null;
+
         String tasks_file_name = "tasks_data.txt";
 
         String tasks_file_path = context.getFilesDir().toString();
@@ -91,12 +93,13 @@ public class TaskStorage implements Parcelable {
         tasks_file.createNewFile();
 
         try {
-            ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(tasks_file));
+             outputStream = new ObjectOutputStream(new FileOutputStream(tasks_file));
 
             for ( Task task : tasks ) {
                 outputStream.writeObject(task);
+                System.out.println("ADDED A TASK");
+
             }
-            outputStream.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -106,18 +109,21 @@ public class TaskStorage implements Parcelable {
         File state_file = new File(state_file_path, state_file_name);
         state_file.createNewFile();
         try {
-            ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(state_file));
+             outputStream = new ObjectOutputStream(new FileOutputStream(state_file));
 
             for ( Boolean b : taskState ) {
                 outputStream.writeObject(b);
+                System.out.println("+++++++++++++++++++++++++++++++++++++++++++++STATEADDED");
+
             }
-            outputStream.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+        outputStream.close();
     }
 
     public void readTasksFromFile(Context context) {
+        ObjectInputStream inputStream = null;
 
         String tasks_file_name = "tasks_data.txt";
         String tasks_file_path = context.getFilesDir().toString();
@@ -126,16 +132,16 @@ public class TaskStorage implements Parcelable {
         if (tasks_file.exists()){
 
         try {
-            ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(tasks_file));
+            inputStream = new ObjectInputStream(new FileInputStream(tasks_file));
             boolean cont = true;
             while (cont) {
                 Task task = (Task) inputStream.readObject();
                 if (task != null) {
                     tasks.add(task);
+                    System.out.println("READ A TASK");
                 } else {
                     cont = false;
                 }
-                inputStream.close();
             }
 
         } catch (FileNotFoundException e) {
@@ -154,16 +160,17 @@ public class TaskStorage implements Parcelable {
         if (state_file.exists()){
 
             try {
-                ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(state_file));
+                inputStream = new ObjectInputStream(new FileInputStream(state_file));
                 boolean cont = true;
                 while (cont) {
                     Boolean b = (Boolean) inputStream.readObject();
-                    if (b != null) {
+                    if (b != null) {                //todo SEEMS LIKE NOT ALL STATES ARE PROPERLY READ
                         taskState.add(b);
+                        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++STATEREAD");
+
                     } else {
                         cont = false;
                     }
-                    inputStream.close();
                 }
 
             } catch (FileNotFoundException e) {
@@ -174,6 +181,12 @@ public class TaskStorage implements Parcelable {
                 e.printStackTrace();
             }
         }
+        try {
+            inputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
         /**
