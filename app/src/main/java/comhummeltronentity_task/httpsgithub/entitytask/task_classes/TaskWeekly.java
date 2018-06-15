@@ -23,9 +23,9 @@ public class TaskWeekly extends Task {
      * @param time
      */
 
-    private Boolean[] days = new Boolean[7];
+    private boolean[] days = new boolean[7];
 
-    public TaskWeekly(String title, String description, Boolean reminder, LocalTime time, Boolean[] days) {
+    public TaskWeekly(String title, String description, Boolean reminder, LocalTime time, boolean[] days) {
         super(title, description,reminder, time);
 
         this.days = days;
@@ -60,7 +60,9 @@ public class TaskWeekly extends Task {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             time = LocalTime.parse(in.readString());
         }
-        days = (Boolean[]) in.readArray(Boolean.class.getClassLoader());
+
+        in.readBooleanArray(days);
+        //days = (Boolean[]) in.readArray(Boolean[].class.getClassLoader());
     }
 
     @Override
@@ -69,8 +71,16 @@ public class TaskWeekly extends Task {
         parcel.writeString(this.description);
         parcel.writeByte((byte) (this.reminder ? 1 : 0)); //reminder(bool) -> byte (in parcel
         parcel.writeString(this.time.toString());         //time(LocalTime) -> string (in parcel)
-        parcel.writeArray(days);
+        parcel.writeBooleanArray(this.days);
 
+    }
+
+    public boolean[] getDays() {
+        return days;
+    }
+
+    public void setDays(boolean[] days) {
+        this.days = days;
     }
 
     @Override

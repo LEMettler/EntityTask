@@ -17,7 +17,7 @@ public abstract class Task implements Parcelable, Serializable {
      * dateDone stellt für jeden date dar, ob dieser done ist oder nicht, je nach subtask wird dieser resetet, oder der task gelöscht, wenn alle erledigt
      *
      *
-     * TODO tasks im system speichern
+     * DONE tasks im system speichern
      */
     protected String title;
     protected String description;

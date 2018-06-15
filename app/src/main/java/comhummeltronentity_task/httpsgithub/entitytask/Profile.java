@@ -12,8 +12,8 @@ import java.io.Serializable;
  * das ist das profil des users, es wird im taskstorage erzeugt, da dieses objekt eh schon einmal durch alle activities geleitet wird
  * dadurch hat das ganze auch nähe zu den tasks, mit denen interagiert wird.
  *
- * TODO MAKE PARCELABLE
- * TODO INTERACT WITH TASKS
+ * DONE MAKE PARCELABLE
+ * DONE INTERACT WITH TASKS
  */
 
 public class Profile implements Parcelable, Serializable{

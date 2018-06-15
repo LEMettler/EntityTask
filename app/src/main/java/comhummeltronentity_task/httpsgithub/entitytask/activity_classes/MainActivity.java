@@ -20,11 +20,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 import comhummeltronentity_task.httpsgithub.entitytask.R;
+import comhummeltronentity_task.httpsgithub.entitytask.TaskStorage;
 import comhummeltronentity_task.httpsgithub.entitytask.activity_classes.mainactivity_support.ViewPagerAdapter;
 import comhummeltronentity_task.httpsgithub.entitytask.task_classes.Task;
 import comhummeltronentity_task.httpsgithub.entitytask.task_classes.TaskCustom;
 import comhummeltronentity_task.httpsgithub.entitytask.task_classes.TaskMonthly;
-import comhummeltronentity_task.httpsgithub.entitytask.TaskStorage;
+import comhummeltronentity_task.httpsgithub.entitytask.task_classes.TaskWeekly;
 
 
 /**
@@ -113,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
             int i = taskStorage.getTasks().indexOf(t);
             if (!taskStorage.getOneTaskState(i)) {
 
+                //monthly
                 if (t instanceof TaskMonthly) {
                     for (LocalDate d : t.getDates()) {
                         if (d.getDayOfMonth() == today.getDayOfMonth()) { //checkt für jeden monthlytask jedes datum ob der tag passt
@@ -120,15 +122,22 @@ public class MainActivity extends AppCompatActivity {
                             break;
                         }
                     }
+                //custom
                 } else if (t instanceof TaskCustom) {
                     if (t.getDates().contains(today)) {
                         selectedTasks.add(t);
                     }
-                } else {
-                    if (t.getDates().contains(today)) {
+                //weekly
+                } else if (t instanceof TaskWeekly) {
+
+                    int daysIndex = today.getDayOfWeek().ordinal();
+                    boolean days[] = ((TaskWeekly) t).getDays();
+
+                    if (days[daysIndex]) {
                         selectedTasks.add(t);
-                        //weekly                                    //todo anzeige von weekly anhand von days
                     }
+
+                    //DONE anzeige von weekly anhand von days
                 }
             }
             ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this, selectedTasks);

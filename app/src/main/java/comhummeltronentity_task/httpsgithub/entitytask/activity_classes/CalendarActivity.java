@@ -15,11 +15,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 import comhummeltronentity_task.httpsgithub.entitytask.R;
+import comhummeltronentity_task.httpsgithub.entitytask.TaskStorage;
 import comhummeltronentity_task.httpsgithub.entitytask.activity_classes.calendaractivity_support.ViewPagerAdapter;
 import comhummeltronentity_task.httpsgithub.entitytask.task_classes.Task;
 import comhummeltronentity_task.httpsgithub.entitytask.task_classes.TaskCustom;
 import comhummeltronentity_task.httpsgithub.entitytask.task_classes.TaskMonthly;
-import comhummeltronentity_task.httpsgithub.entitytask.TaskStorage;
+import comhummeltronentity_task.httpsgithub.entitytask.task_classes.TaskWeekly;
 
 /**
  * Hier wird der Kalender von Google implementiert. Hail Corporate.
@@ -115,11 +116,19 @@ public class CalendarActivity extends AppCompatActivity {
                     if (t.getDates().contains(selectedDate)) {
                         selectedTasks.add(t);
                     }
-                } else {
-                    if (t.getDates().contains(selectedDate)) {
+                } else if (t instanceof TaskWeekly) {
+                    System.out.println("TASKWEEKLY");
+
+                    int daysIndex = selectedDate.getDayOfWeek().ordinal();
+                    boolean days[] = ((TaskWeekly) t).getDays();
+
+                    if (days[daysIndex]) {
+                        System.out.println("ADDDAY");
+
                         selectedTasks.add(t);
-                        //weekly                                    //todo anzeige von weekly anhand von days
                     }
+
+                    //done anzeige von weekly anhand von days
                 }
             }
             ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this, selectedTasks);

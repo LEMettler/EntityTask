@@ -1,8 +1,9 @@
 package comhummeltronentity_task.httpsgithub.entitytask.activity_classes;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -20,6 +22,7 @@ import android.widget.TimePicker;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 
 import comhummeltronentity_task.httpsgithub.entitytask.R;
@@ -27,6 +30,7 @@ import comhummeltronentity_task.httpsgithub.entitytask.TaskStorage;
 import comhummeltronentity_task.httpsgithub.entitytask.task_classes.Task;
 import comhummeltronentity_task.httpsgithub.entitytask.task_classes.TaskCustom;
 import comhummeltronentity_task.httpsgithub.entitytask.task_classes.TaskMonthly;
+import comhummeltronentity_task.httpsgithub.entitytask.task_classes.TaskWeekly;
 
 /**
 * Hier werden die einzelnen Tasks erzeugt
@@ -73,9 +77,9 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
 
     //Attribute zum Date/Time input
     private String inputTime;
+    private boolean[] inputDays;
     private String inputYear, inputMonth, inputDay;
     private ArrayList<String> dates = new ArrayList<>();
-    private AlertDialog.Builder  alertDialogBuilder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +101,9 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
         txtInputDate = findViewById(R.id.txtInputDate);
         txtInputTime = findViewById(R.id.txtInputTime);
 
+        inputDays = new boolean[7];
+        Arrays.fill(inputDays,false);
+
         //taskStorage = getIntent().getParcelableExtra("TASKSTORAGE");
         taskStorage = getIntent().getExtras().getParcelable("TASKSTORAGE");
 
@@ -117,7 +124,6 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
          * schaut tutorials dazu, was glaubt ihr, warum ich das nicht selbst mache.
          * den dialog initialisiert ihr in btnPickHandler() und in addTask() soll ein weekly-task erstellt werden und geadded werden (siehe andere tasks)
          */
-        alertDialogBuilder = new AlertDialog.Builder(this);     //hier entsteht der dialog für die tage auswahl
 
 
         //**************************************************************************************************************************************
@@ -143,16 +149,68 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
     //auswahl 1. datum & time
     public void btnPickHandler(View v){
 
-        if (!rbtnWeekly.isChecked()) {
-            Calendar c = Calendar.getInstance();
-            int year = c.get(Calendar.YEAR);
-            int month = c.get(Calendar.MONTH);
-            int day = c.get(Calendar.DAY_OF_MONTH);
+        final Context context = this;
 
+        Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+
+        if (!rbtnWeekly.isChecked()) {
             //DatePickerDialog datePickerDialog = new DatePickerDialog(this, this, year, month, day);
             DatePickerDialog datePickerDialog = new DatePickerDialog(this, R.style.DialogTheme, this, year, month, day );
             datePickerDialog.show();
         }else{
+
+            final Dialog d = new Dialog(this);
+            d.setTitle("Days");
+            d.setCancelable(false);
+
+            d.setContentView(R.layout.dialog_weekly);
+
+            final CheckBox rbtnMonday = d.findViewById(R.id.checkMonday);
+            final CheckBox rbtnTuesday = d.findViewById(R.id.checkTuesday);
+            final CheckBox rbtnWednesday = d.findViewById(R.id.checkWednesday);
+            final CheckBox rbtnThursday = d.findViewById(R.id.checkThursday);
+            final CheckBox rbtnFriday = d.findViewById(R.id.checkFriday);
+            final CheckBox rbtnSaturday = d.findViewById(R.id.checkSaturday);
+            final CheckBox rbtnSunday = d.findViewById(R.id.checkSunday);
+
+
+
+
+            Button btnCancel = d.findViewById(R.id.btnCancel);
+            Button btnOK = d.findViewById(R.id.btnOK);
+
+            btnCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    d.dismiss();
+                }
+            });
+
+            btnOK.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    inputDays[0] = rbtnMonday.isChecked();
+                    inputDays[1] = rbtnTuesday.isChecked();
+                    inputDays[2] = rbtnWednesday.isChecked();
+                    inputDays[3] = rbtnThursday.isChecked();
+                    inputDays[4] = rbtnFriday.isChecked();
+                    inputDays[5] = rbtnSaturday.isChecked();
+                    inputDays[6] = rbtnSunday.isChecked();
+
+                    Calendar c = Calendar.getInstance();
+                    int hour = c.get(Calendar.HOUR_OF_DAY);
+                    int minute = c.get(Calendar.MINUTE);
+                    TimePickerDialog timePickerDialog = new TimePickerDialog(context, R.style.DialogTheme, (TimePickerDialog.OnTimeSetListener) context, hour, minute, true);
+                    timePickerDialog.show();
+
+                    d.dismiss();
+                }
+            });
+            d.show();
+
             /**
              * hier den weekly-dialog erstellen
              *anschließend soll auch ein timepicker erstellt werden (siehe ~ line 169)
@@ -167,10 +225,74 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
         int month = c.get(Calendar.MONTH);
         int day = c.get(Calendar.DAY_OF_MONTH);
 
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this, R.style.DialogTheme, this, year, month, day );
-        datePickerDialog.show();
+        final Context context = this;
 
-        txtInputDate.setText(txtInputDate.getText() + ", " + dates.get(dates.size() - 1));
+        if (rbtnWeekly.isChecked()) {
+
+            final Dialog d = new Dialog(this);
+            d.setTitle("Days");
+            d.setCancelable(false);
+
+            d.setContentView(R.layout.dialog_weekly);
+
+            final CheckBox rbtnMonday = d.findViewById(R.id.checkMonday);
+            final CheckBox rbtnTuesday = d.findViewById(R.id.checkTuesday);
+            final CheckBox rbtnWednesday = d.findViewById(R.id.checkWednesday);
+            final CheckBox rbtnThursday = d.findViewById(R.id.checkThursday);
+            final CheckBox rbtnFriday = d.findViewById(R.id.checkFriday);
+            final CheckBox rbtnSaturday = d.findViewById(R.id.checkSaturday);
+            final CheckBox rbtnSunday = d.findViewById(R.id.checkSunday);
+
+            Button btnCancel = d.findViewById(R.id.btnCancel);
+            Button btnOK = d.findViewById(R.id.btnOK);
+
+            btnCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    d.dismiss();
+                }
+            });
+
+            btnOK.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    inputDays[0] = rbtnMonday.isChecked();
+                    inputDays[1] = rbtnTuesday.isChecked();
+                    inputDays[2] = rbtnWednesday.isChecked();
+                    inputDays[3] = rbtnThursday.isChecked();
+                    inputDays[4] = rbtnFriday.isChecked();
+                    inputDays[5] = rbtnSaturday.isChecked();
+                    inputDays[6] = rbtnSunday.isChecked();
+
+                    d.dismiss();
+                }
+            });
+            d.show();
+
+            txtInputDate.setText("");
+
+            if (inputDays[0])
+                txtInputDate.setText("Monday");
+            if (inputDays[1])
+                txtInputDate.setText(txtInputDate.getText() + "Tuesday");
+            if (inputDays[2])
+                txtInputDate.setText(txtInputDate.getText() + "Wednesday");
+            if (inputDays[3])
+                txtInputDate.setText(txtInputDate.getText() + "Thursday");
+            if (inputDays[4])
+                txtInputDate.setText(txtInputDate.getText() + "Friday");
+            if (inputDays[5])
+                txtInputDate.setText(txtInputDate.getText() + "Saturday");
+            if (inputDays[6])
+                txtInputDate.setText(txtInputDate.getText() + "Sunday");
+
+        }else {
+            DatePickerDialog datePickerDialog = new DatePickerDialog(this, R.style.DialogTheme, this, year, month, day);
+            datePickerDialog.show();
+            txtInputDate.setText(txtInputDate.getText() + ", " + dates.get(dates.size() - 1));
+
+        }
+
     }
     //nachdem das popup zur datumsasuwahl mit ok bestätigt wurde, wird diese methode aufgerufen, zuerstmal wird das datum abgespeichert (+ überprüfung ob doppelt)
     //wenn es das erste datum ist -> auch time picken
@@ -212,7 +334,29 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
         else
             inputTime = inputTime + i1 + ":00";
 
-        txtInputDate.setText(dates.get(0));
+        if (rbtnWeekly.isChecked()) {
+            txtInputDate.setText("");
+
+            if (inputDays[0])
+                txtInputDate.setText("Monday");
+            if (inputDays[1])
+                txtInputDate.setText(txtInputDate.getText() + "Tuesday");
+            if (inputDays[2])
+                txtInputDate.setText(txtInputDate.getText() + "Wednesday");
+            if (inputDays[3])
+                txtInputDate.setText(txtInputDate.getText() + "Thursday");
+            if (inputDays[4])
+                txtInputDate.setText(txtInputDate.getText() + "Friday");
+            if (inputDays[5])
+                txtInputDate.setText(txtInputDate.getText() + "Saturday");
+            if (inputDays[6])
+                txtInputDate.setText(txtInputDate.getText() + "Sunday");
+
+        } else {
+            txtInputDate.setText(dates.get(0));
+
+        }
+
         txtInputTime.setText(inputTime);
 
         btnPick.setVisibility(View.GONE);
@@ -263,12 +407,21 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
                 taskStorage.getTasks().set(preIndex, newtask);
             }
 //**************************************************************************************************
-            //WeeklyTask                        //TODO weekly tasks erstellen
+            //WeeklyTask                        //DONE weekly tasks erstellen
         }else{
+
+            LocalTime timeFormat = LocalTime.parse(inputTime);
+            TaskWeekly newtask = new TaskWeekly(title, description, reminder, timeFormat, inputDays);
+
+            if (preIndex == -1) {
+                taskStorage.addTask(newtask);
+            } else {
+                taskStorage.getTasks().set(preIndex, newtask);
+            }
+
             /**
              * hier die weekly-tasks erstellen und in den taskStorage adden
              */
-
         }
 
         //zurück zu taskactivity

@@ -21,8 +21,9 @@ import comhummeltronentity_task.httpsgithub.entitytask.task_classes.Task;
  *
  * builds den slider()viewPager in der CalendarActivity
  *
- * todo nur die tasks des tags X DONE
+ * DONE nur die tasks des tags X
  * todo description anzeigen?
+ * todo zeit anzeigen und nach dieser ordnen
  */
 
 public class ViewPagerAdapter extends PagerAdapter {

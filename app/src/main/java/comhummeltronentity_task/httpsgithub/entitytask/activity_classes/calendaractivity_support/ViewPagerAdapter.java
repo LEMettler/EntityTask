@@ -1,6 +1,8 @@
 package comhummeltronentity_task.httpsgithub.entitytask.activity_classes.calendaractivity_support;
 
 import android.content.Context;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -21,8 +23,9 @@ import comhummeltronentity_task.httpsgithub.entitytask.task_classes.Task;
  *
  * builds den slider()viewPager in der CalendarActivity
  *
- * todo nur die tasks des tags X DONE
+ * DONE nur die tasks des tags X
  * todo description anzeigen?
+ * todo zeit anzeigen und nach dieser ordnen
  */
 
 public class ViewPagerAdapter extends PagerAdapter {
@@ -64,6 +67,7 @@ public class ViewPagerAdapter extends PagerAdapter {
 
             Button btnDone = view.findViewById(R.id.btnDone);
             btnDone.setOnClickListener(new View.OnClickListener() {
+                @RequiresApi(api = Build.VERSION_CODES.O)
                 @Override
                 public void onClick(View view) {
                     calendar.setTaskDone(taskList, position);

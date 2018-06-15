@@ -12,6 +12,9 @@ import comhummeltronentity_task.httpsgithub.entitytask.task_classes.TaskCustom;
 
 /**
  * Created by Meerlu on 14.06.2018.
+ *
+ * KANN AUCH GELÖSCHT WERDENKANN AUCH GELÖSCHT WERDENKANN AUCH GELÖSCHT WERDEN
+ * KANN AUCH GELÖSCHT WERDENKANN AUCH GELÖSCHT WERDENKANN AUCH GELÖSCHT WERDEN
  */
 
 public class DBHandler extends SQLiteOpenHelper {
