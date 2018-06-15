@@ -111,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
 
         for (Task t : taskStorage.getTasks()) {
 
+            //when task is not done yet
             int i = taskStorage.getTasks().indexOf(t);
             if (!taskStorage.getOneTaskState(i)) {
 
@@ -139,6 +140,9 @@ public class MainActivity extends AppCompatActivity {
 
                     //DONE anzeige von weekly anhand von days
                 }
+                //todo reset done tasks, after the day
+            }else{
+
             }
             ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this, selectedTasks);
             viewPager.setAdapter(viewPagerAdapter);
