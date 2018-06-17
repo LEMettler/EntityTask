@@ -45,7 +45,10 @@ public class CalendarActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.viewPager);   //initialisiert den taskslider
 
         calendar = findViewById(R.id.calendarView);
-        selectedDate = null;                                                                        //Listener für ausgewählte tage
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            selectedDate = LocalDate.now();                                                                        //Listener für ausgewählte tage
+        }
         calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
@@ -67,7 +70,9 @@ public class CalendarActivity extends AppCompatActivity {
                 refreshViewPager();
             }
         });
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            refreshViewPager();
+        }
     }
 
     //vom viewpageadapter gecallt wenn ein view geklickt wird
@@ -103,9 +108,10 @@ public class CalendarActivity extends AppCompatActivity {
         for (Task t : taskStorage.getTasks()) {
 
             int i = taskStorage.getTasks().indexOf(t);
-            if (!taskStorage.getOneTaskState(i)) {
+            //if (taskStorage.getOneTaskState(i)) {
 
                 if (t instanceof TaskMonthly) {
+
                     for (LocalDate d : t.getDates()) {
                         if (d.getDayOfMonth() == selectedDate.getDayOfMonth()) { //checkt für jeden monthlytask jedes datum ob der tag passt
                             selectedTasks.add(t);
@@ -113,27 +119,28 @@ public class CalendarActivity extends AppCompatActivity {
                         }
                     }
                 } else if (t instanceof TaskCustom) {
+
                     if (t.getDates().contains(selectedDate)) {
                         selectedTasks.add(t);
                     }
                 } else if (t instanceof TaskWeekly) {
-                    System.out.println("TASKWEEKLY");
 
                     int daysIndex = selectedDate.getDayOfWeek().ordinal();
                     boolean days[] = ((TaskWeekly) t).getDays();
 
                     if (days[daysIndex]) {
                         System.out.println("ADDDAY");
-
                         selectedTasks.add(t);
                     }
-
                     //done anzeige von weekly anhand von days
                 }
-            }
-            ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this, selectedTasks);
-            viewPager.setAdapter(viewPagerAdapter);
+
+                    //TODO erledigt anzeigen
+
+            //}
         }
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this, selectedTasks);
+        viewPager.setAdapter(viewPagerAdapter);
     }
 
     //der viewpager ruft diese methode auf um einen task zu erledigen
@@ -154,6 +161,8 @@ public class CalendarActivity extends AppCompatActivity {
         refreshViewPager();
 
         taskStorage.profile.increasePoints(20);
+        taskStorage.saveTasksToFile(this);
+        taskStorage.saveProfileToFile(this);
     }
 
     @Override

@@ -106,14 +106,14 @@ public class MainActivity extends AppCompatActivity {
     //erstellen/erneuern  des viewpager auf basis des heutigen datum
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void refreshViewPager() {
+
         LocalDate today = LocalDate.now();
         ArrayList<Task> selectedTasks = new ArrayList<>();              //DONE tasks, spezifisch für ihren type anzeigen
 
         for (Task t : taskStorage.getTasks()) {
 
             //when task is not done yet
-            int i = taskStorage.getTasks().indexOf(t);
-            if (!taskStorage.getOneTaskState(i)) {
+            if (!taskStorage.getOneTaskState(t)) {
 
                 //monthly
                 if (t instanceof TaskMonthly) {
@@ -141,12 +141,10 @@ public class MainActivity extends AppCompatActivity {
                     //DONE anzeige von weekly anhand von days
                 }
                 //todo reset done tasks, after the day
-            }else{
-
             }
-            ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this, selectedTasks);
-            viewPager.setAdapter(viewPagerAdapter);
         }
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this, selectedTasks);
+        viewPager.setAdapter(viewPagerAdapter);
     }
 
     //Link zu TaskActivity
@@ -193,6 +191,8 @@ public class MainActivity extends AppCompatActivity {
         refreshViewPager();
 
         taskStorage.profile.increasePoints(20);
+        taskStorage.saveTasksToFile(this);
+        taskStorage.saveProfileToFile(this);
         updateProgress();
     }
 

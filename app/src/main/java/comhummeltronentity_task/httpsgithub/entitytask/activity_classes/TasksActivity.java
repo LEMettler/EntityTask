@@ -182,8 +182,9 @@ public class TasksActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         int index = mViewPager.getCurrentItem();
-                        taskStorage.getTasks().remove(index);
+                        taskStorage.removeOneTask(index);
                         taskStorage.saveTasksToFile(context);
+                        setupViewPager(mViewPager);
                     }
                 }).create().show();
     }

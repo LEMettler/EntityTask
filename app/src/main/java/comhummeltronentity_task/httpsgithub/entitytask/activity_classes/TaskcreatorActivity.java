@@ -389,6 +389,8 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
                 taskStorage.addTask(newtask);
             } else {
                taskStorage.getTasks().set(preIndex, newtask);
+                taskStorage.getTaskState().set(preIndex,false);
+
             }
 //**************************************************************************************************
             //MonthlyTask
@@ -405,6 +407,8 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
                 taskStorage.addTask(newtask);
             } else {
                 taskStorage.getTasks().set(preIndex, newtask);
+                taskStorage.getTaskState().set(preIndex,false);
+
             }
 //**************************************************************************************************
             //WeeklyTask                        //DONE weekly tasks erstellen
@@ -417,6 +421,7 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
                 taskStorage.addTask(newtask);
             } else {
                 taskStorage.getTasks().set(preIndex, newtask);
+                taskStorage.getTaskState().set(preIndex, false);
             }
 
             /**
