@@ -63,6 +63,7 @@ public class ViewPagerAdapter extends PagerAdapter {
             String title = taskList.get(position).getTitle();     //genau das nochmal nur für description, wenn wir noch ne description wollen
             txtTitle.setText(title);                              // + xml file
 
+        //button um tasks zu erledigen
         Button btnDone = view.findViewById(R.id.btnDone);
         btnDone.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -72,6 +73,9 @@ public class ViewPagerAdapter extends PagerAdapter {
                 //DONE hier code um task done zu setzen
             }
         });
+
+
+
 
             ViewPager viewPager = (ViewPager) container;
             viewPager.addView(view, 0);

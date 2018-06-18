@@ -275,7 +275,6 @@ public class TaskStorage implements Parcelable {
         System.out.println(i + "    " + s);
         System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 
-
         return s;
     }
 
@@ -285,6 +284,11 @@ public class TaskStorage implements Parcelable {
 
     public void setOneTaskState(int index, Boolean state){
         taskState.set(index, state);
+    }
+
+    public void setOneTaskState(Task t, Boolean state){
+        int i = tasks.indexOf(t);
+        taskState.set(i, state);
     }
 
     public void addTask(Task task) {

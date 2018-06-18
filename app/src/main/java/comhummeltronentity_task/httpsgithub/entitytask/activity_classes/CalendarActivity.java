@@ -137,9 +137,48 @@ public class CalendarActivity extends AppCompatActivity {
 
                     //TODO erledigt anzeigen
 
+            //}else{
+
+                LocalDate today = LocalDate.now();
+
+                //custom: task expired or set to done=false again?
+                if (t instanceof TaskCustom){
+                    for (LocalDate d : t.getDates()){
+                        if (d.isAfter(today)) {
+                            taskStorage.setOneTaskState(t, false);
+                            break;
+                        }
+                    }
+                    //custom: task expired or set to done=false again?
+                }else if (t instanceof TaskMonthly){
+                    int j = 0;
+                    for (LocalDate d : t.getDates()){
+                        if (d != today) {
+                            i++;                //wenn alle datume nicht heute sind, dann setze wieder done = false
+                        }
+                    }
+                    if (j == t.getDates().size()) {
+                        taskStorage.setOneTaskState(t, false);
+                    }
+                    //weekly: task expired or set to done=false again?
+                } else if (t instanceof TaskWeekly) {
+                    int todayIndex = today.getDayOfWeek().ordinal();  //wenn ein tagesindexe des tasks mit heute übereinstimmt -> done bleibt true
+                    boolean days[] = ((TaskWeekly) t).getDays();     //=> wenn alle tagesindexe nicht heute sind -> done = false
+
+                    if (!days[todayIndex]) {
+                        taskStorage.setOneTaskState(t, false);
+                    }
+                }
             //}
         }
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this, selectedTasks);
+
+        ArrayList<Boolean> selectedTaskStates = new ArrayList<>();
+        for ( Task t: selectedTasks) {
+            Boolean state = taskStorage.getOneTaskState(t);
+            selectedTaskStates.add(state);
+        }
+
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this, selectedTasks, selectedTaskStates, selectedDate);
         viewPager.setAdapter(viewPagerAdapter);
     }
 

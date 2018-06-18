@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
 
         for (Task t : taskStorage.getTasks()) {
 
-            //when task is not done yet
+            //done =false
             if (!taskStorage.getOneTaskState(t)) {
 
                 //monthly
@@ -141,6 +141,37 @@ public class MainActivity extends AppCompatActivity {
                     //DONE anzeige von weekly anhand von days
                 }
                 //todo reset done tasks, after the day
+
+                //done = true
+            } else{
+                //custom: task expired or set to done=false again?
+                if (t instanceof TaskCustom){
+                    for (LocalDate d : t.getDates()){
+                        if (d.isAfter(today)) {
+                            taskStorage.setOneTaskState(t, false);
+                            break;
+                        }
+                    }
+                    //custom: task expired or set to done=false again?
+                }else if (t instanceof TaskMonthly){
+                    int i = 0;
+                    for (LocalDate d : t.getDates()){
+                        if (d != today) {
+                            i++;                //wenn alle datume nicht heute sind, dann setze wieder done = false
+                        }
+                    }
+                    if (i == t.getDates().size()) {
+                        taskStorage.setOneTaskState(t, false);
+                    }
+                    //weekly: task expired or set to done=false again?
+                } else if (t instanceof TaskWeekly) {
+                    int todayIndex = today.getDayOfWeek().ordinal();  //wenn ein tagesindexe des tasks mit heute übereinstimmt -> done bleibt true
+                    boolean days[] = ((TaskWeekly) t).getDays();     //=> wenn alle tagesindexe nicht heute sind -> done = false
+
+                    if (!days[todayIndex]) {
+                        taskStorage.setOneTaskState(t, false);
+                    }
+                }
             }
         }
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this, selectedTasks);

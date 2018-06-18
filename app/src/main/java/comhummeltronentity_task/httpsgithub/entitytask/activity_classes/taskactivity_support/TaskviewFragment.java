@@ -40,7 +40,7 @@ public class TaskviewFragment extends android.support.v4.app.Fragment {
         View view = inflater.inflate(R.layout.fragment_tasks,container,false);
         title = view.findViewById(R.id.txtTitle);
         description = view.findViewById(R.id.txtDescription);
-        time = view.findViewById(R.id.txtTime);
+        time = view.findViewById(R.id.txtState);
         dates = view.findViewById(R.id.txtDates);
 
 
