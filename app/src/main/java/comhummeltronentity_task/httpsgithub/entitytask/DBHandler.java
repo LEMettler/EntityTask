@@ -13,8 +13,10 @@ import comhummeltronentity_task.httpsgithub.entitytask.task_classes.TaskCustom;
 /**
  * Created by Meerlu on 14.06.2018.
  *
- * KANN AUCH GELÖSCHT WERDENKANN AUCH GELÖSCHT WERDENKANN AUCH GELÖSCHT WERDEN
- * KANN AUCH GELÖSCHT WERDENKANN AUCH GELÖSCHT WERDENKANN AUCH GELÖSCHT WERDEN
+ *
+ * datenbank stellt sich (zumindest bei der struktur unserer app) als zu unötig aufwändig heraus
+ * deshalb ist diese klasse auch nurnoch ein kleines totes relikt dieses projekts
+ * (hab ptsd von addTask())
  */
 
 public class DBHandler extends SQLiteOpenHelper {

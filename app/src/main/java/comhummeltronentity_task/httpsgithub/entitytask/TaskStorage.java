@@ -37,8 +37,11 @@ public class TaskStorage implements Parcelable {
         profile = new Profile();
     }
 
-    //****************************************************************************************************
-    //Parcelable-Methoden, benötigt um Objekte zwischen Aktivites zu übergeben 
+    //************************************Parcelable************************************************
+
+    /**
+     * Parcelable-Methoden, benötigt um Objekte zwischen Aktivites zu übergeben
+     */
     public TaskStorage(Parcel in) {
         readFromParcel(in);
     }
@@ -74,10 +77,14 @@ public class TaskStorage implements Parcelable {
         parcel.writeList(taskState);
         parcel.writeParcelable(profile, i);
     }
-    //***********************************************************************************************
 
+    //**********************************Speichern***************************************************
     /**
-     * TEST TO SAVE ALL TASKS TO A TEXTFILE
+     * wir speichern einerseits das profil, die tasks und des weiteren die states der tasks, indem wir dieses mit einem
+     * objectoutputstream (cooles gedöhns, macht eig. alles was ein file.o.s. auch machen könnte,
+     * regelt alle attribute deren zuordnung) einlesen in seperaten textfiles speichern.
+     *
+     * <viel code, viel gleiches, wenig wirkliche logik>
      */
 
     public void saveProfileToFile(Context context) {
@@ -161,10 +168,7 @@ public class TaskStorage implements Parcelable {
 
             for ( Boolean b : taskState ) {
                 outputStream.writeObject(b);
-                System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
                 System.out.println(b);
-                System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-
             }
 
             outputStream.close();
@@ -236,10 +240,7 @@ public class TaskStorage implements Parcelable {
 
     }
 
-        /**
-     *
-     *
-     */
+    //***********************************Access auf Attribute***************************************
 
     //Access für die Activities
     public ArrayList<Task> getTasks() {

@@ -18,7 +18,7 @@ import java.io.Serializable;
 
 public class Profile implements Parcelable, Serializable{
 
-    //public static final int MAX_LEVEL = 100;
+    //********************************Attribute*****************************************************
     public static final int POINT_LIMIT = 100;
 
     private int points;
@@ -59,7 +59,10 @@ public class Profile implements Parcelable, Serializable{
     }
 
     //****************************************************************************************************
-    //Parcelable-Methoden, benötigt um Objekte zwischen Aktivites zu übergeben
+
+    /**
+     * Parcelable-Methoden, benötigt um Objekte zwischen Aktivites zu übergeben
+     */
     @Override
     public int describeContents() {
         return 0;

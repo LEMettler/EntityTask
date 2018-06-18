@@ -19,15 +19,17 @@ import comhummeltronentity_task.httpsgithub.entitytask.activity_classes.taskacti
 import comhummeltronentity_task.httpsgithub.entitytask.activity_classes.taskactivity_support.TaskviewFragment;
 import comhummeltronentity_task.httpsgithub.entitytask.task_classes.Task;
 
-public class TasksActivity extends AppCompatActivity {
-    /**
-     * Das Ist die Activity die die Übersicht über die einzelnen bereits erzeugten Tasks anzeigt
-     * Über den kleinen button (fap) kommt man zum taskcreator
-     * <p>
-     * DONE tasks anzeigen
-     * DONE tasks löschen/erledigen
-     */
+/**
+ * Das Ist die Activity die die Übersicht über die einzelnen bereits erzeugten Tasks anzeigt
+ * Über den kleinen button (fap) kommt man zum taskcreator
+ * <p>
+ * DONE tasks anzeigen
+ * DONE tasks löschen/erledigen
+ */
 
+public class TasksActivity extends AppCompatActivity {
+
+    //************************Attribute**************************************************************
     private static final String TAG = "TaskActivity";
     private static TaskStorage taskStorage;
 
@@ -35,7 +37,59 @@ public class TasksActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private int item;
 
+//****************************onCreate**********************************************************
+    /**
+     * initializieren der xml + aufnahme des storage
+     */
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_tasks);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        //taskStorage = getIntent().getParcelableExtra("TASKSTORAGE");
+        taskStorage = getIntent().getExtras().getParcelable("TASKSTORAGE");
+        item = getIntent().getExtras().getInt("ITEMINDEX");
+
+        //Fragment aufsetzung des viewpagers
+        //mSectionsPagerAdapter =new SectionsPageAdapter(getSupportFragmentManager());
+        mViewPager = findViewById(R.id.container);
+        setupViewPager(mViewPager);
+        if (item >= 0){                                         //when a special itemindex was parced, it should be shown
+            mViewPager.setCurrentItem(item, true);
+        }
+
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                gotoTaskcreator(view);
+            }
+        });
+    }
+
+    //<ignore>
+    @Override
+    protected void onStop() {
+        taskStorage.saveProfileToFile(this);
+        super.onStop();
+    }
+
+    @Override
+    public void finish() {
+        //rückgabe des taskstorage an mainactivity
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra("TASKSTORAGE", taskStorage);
+        resultIntent.putExtra("ITEMINDEX", item);
+        setResult(1, resultIntent);
+
+        super.finish();
+    }
+
+    //****************************viewpager*********************************************************
     //setup of fragments (1 task -> 1 fragment)
     private void setupViewPager(ViewPager viewPager){
 
@@ -68,37 +122,6 @@ public class TasksActivity extends AppCompatActivity {
         viewPager.setCurrentItem(page);
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tasks);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        //taskStorage = getIntent().getParcelableExtra("TASKSTORAGE");
-        taskStorage = getIntent().getExtras().getParcelable("TASKSTORAGE");
-        item = getIntent().getExtras().getInt("ITEMINDEX");
-
-        //Fragment aufsetzung des viewpagers
-        //mSectionsPagerAdapter =new SectionsPageAdapter(getSupportFragmentManager());
-        mViewPager = findViewById(R.id.container);
-        setupViewPager(mViewPager);
-        if (item >= 0){                                         //when a special itemindex was parced, it should be shown
-            mViewPager.setCurrentItem(item, true);
-        }
-
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                gotoTaskcreator(view);
-            }
-        });
-    }
-
-
     //Link zu TaskCreator
     //  die Referenz zum TaskStorage wird mit übergeben über den Intent
 
@@ -125,18 +148,20 @@ public class TasksActivity extends AppCompatActivity {
         setupViewPager(mViewPager);
     }
 
-    @Override
-    public void finish() {
-        //rückgabe des taskstorage an mainactivity
-        Intent resultIntent = new Intent();
-        resultIntent.putExtra("TASKSTORAGE", taskStorage);
-        resultIntent.putExtra("ITEMINDEX", item);
-        setResult(1, resultIntent);
 
-        super.finish();
-    }
+    //**********************************************************************************************
 
-
+    /**
+     *methoden für das popup-menu rechts oben, teilweise vorgeneriert
+     * erzeugt dialoge für user-bestätigung
+     *
+     * delete:
+     *      den momentanen viewindex im taskstorage löschen und das ganze refreshen (teilweise probmlem)
+     *
+     * edit:
+     *      startet den taskcreator, gibt aber titel und description mit, dieser registriert den
+     *      sonderfall und ersetzt den task, anstatt einfach neu hinzuzufügen
+     */
     //erstellt die action bar oben, die die drei menüpunkte hat
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -207,12 +232,5 @@ public class TasksActivity extends AppCompatActivity {
                 }).create().show();
     }
 
-
-    //<ignore>
-    @Override
-    protected void onStop() {
-        taskStorage.saveProfileToFile(this);
-        super.onStop();
-    }
 }
 

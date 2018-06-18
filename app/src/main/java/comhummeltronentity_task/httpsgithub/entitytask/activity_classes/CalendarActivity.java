@@ -30,11 +30,16 @@ import comhummeltronentity_task.httpsgithub.entitytask.task_classes.TaskWeekly;
 
 public class CalendarActivity extends AppCompatActivity {
 
+    //************************Attribute**************************************************************
     private CalendarView calendar;
     private ViewPager viewPager;
     private TaskStorage taskStorage;
     private LocalDate selectedDate;
 
+    //************************onCreate**************************************************************
+    /**
+     * initializieren der xml mit calendar + aufnehmen des taskstorage
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,30 +80,32 @@ public class CalendarActivity extends AppCompatActivity {
         }
     }
 
-    //vom viewpageadapter gecallt wenn ein view geklickt wird
-    public void gotoTaskActivity(Task task){
-        int itemIndex = taskStorage.getTasks().indexOf(task);
 
-        Intent intent = new Intent(this, TasksActivity.class);
-        intent.putExtra("TASKSTORAGE", taskStorage);    //Übergeben des Storage über Intent
-        intent.putExtra("ITEMINDEX", itemIndex);    //übergeben des index des longclicked-task, der angezeigt werden soll
-        startActivityForResult(intent, 1);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // Check which request we're responding to
-        if (requestCode == 1) {
-            // Make sure the request was successful
-            //if (resultCode == RESULT_OK)
-            taskStorage = data.getExtras().getParcelable("TASKSTORAGE");
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                refreshViewPager();
-            }
-            viewPager.setCurrentItem(data.getExtras().getInt("ITEMINDEX"));
-        }
-    }
-
+//****************************viewpager & progressbar*******************************************
+    /**
+     * <lange, schwierige methode die immernoch angstzustände in mir auslöst>
+     *
+     * angezeigt werden die tasks, die zum, im calendar, ausgewählten datum passen, das today aus
+     * der main ist also selectedDate
+     * auch wollen wir hier nicht nur die noch nicht done tasks anzeigen, sondern alle des tages.
+     * je nachdem welchen status der task in beziehung zu heute hat, wird der done button ersetzt
+     * dies regelt aber der viewpageadapter, der im support-ordner liegt
+     *
+     * DONE = FALSE
+     * + custom
+     *      - today ist in der datumliste des tasks
+     * + monthly
+     *      - alle datum durchgehen, schauen ob der tag des monats mit dem von today übereinstimmt
+     * + weekly
+     *      -index von today in der woche pullen
+     *      -aus der boolean tagesliste den index abfragen, ob dieser nicht schon done ist
+     *
+     * DONE = TRUE
+     *      wenn der task zwar done ist, nicht heute relevant ist,
+     *      aber in der zukunft nochmal vorkommt, wird er wieder zurückgesetzt
+     *      (für details siehe randcomments der else)
+     *
+     */
     //erstellen/erneuern  des staskslider(viewpager) auf basis des ausgewählten datumani
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void refreshViewPager() {
@@ -182,7 +189,13 @@ public class CalendarActivity extends AppCompatActivity {
         viewPager.setAdapter(viewPagerAdapter);
     }
 
-    //der viewpager ruft diese methode auf um einen task zu erledigen
+
+    /**
+     * über den viewpager kann der user den button DONE triggern, der ruft diese methode auf.
+     * der state des tasks wird auf done gesetzt und das wird in einem toast (kleine message)
+     * angezeigt, anschliesend bekommt der user xp auf sein profil hinzuaddiert und dessen anzeige
+     * aktualisiert
+     */
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void setTaskDone(ArrayList<Task> selectedTasks, int position){
         Task t = selectedTasks.get(position);
@@ -202,6 +215,41 @@ public class CalendarActivity extends AppCompatActivity {
         taskStorage.profile.increasePoints(20);
         taskStorage.saveTasksToFile(this);
         taskStorage.saveProfileToFile(this);
+    }
+
+    //****************************Activity-Wechsel**************************************************
+    /**
+     * Activities werden für eine rückgabe aufgerufen,
+     * dabei wird ihnen ein Intent gegeben, dieser dient einfach zur übertragung des taskStroage,
+     * der auch wieder zurück gegeben wird (weil die referenz an ein objekt zwar weitergegeben wird,
+     * aber beim zurückgehen nicht dort aktualisiert wird)
+     *
+     * Den an deise zurückgegebene Storage speichern wir dann wieder
+     */
+
+
+    //vom viewpageadapter gecallt wenn ein view geklickt wird um genau den anzuzeigen
+    public void gotoTaskActivity(Task task){
+        int itemIndex = taskStorage.getTasks().indexOf(task);
+
+        Intent intent = new Intent(this, TasksActivity.class);
+        intent.putExtra("TASKSTORAGE", taskStorage);    //Übergeben des Storage über Intent
+        intent.putExtra("ITEMINDEX", itemIndex);    //übergeben des index des longclicked-task, der angezeigt werden soll
+        startActivityForResult(intent, 1);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == 1) {
+            // Make sure the request was successful
+            //if (resultCode == RESULT_OK)
+            taskStorage = data.getExtras().getParcelable("TASKSTORAGE");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                refreshViewPager();
+            }
+            viewPager.setCurrentItem(data.getExtras().getInt("ITEMINDEX"));
+        }
     }
 
     @Override

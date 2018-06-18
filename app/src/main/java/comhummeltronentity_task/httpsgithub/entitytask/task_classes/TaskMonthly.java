@@ -17,7 +17,8 @@ import java.util.ArrayList;
 public class TaskMonthly extends Task {
 
     /**
-     * sub für monatliche tasks, auch hier gibt es eine liste, so können auch mehrere tage monthly wiederholt werden
+     * sub für monatliche tasks, auch hier gibt es eine liste
+     * so können auch mehrere tage monthly wiederholt werden
      * @param title
      * @param description
      * @param time

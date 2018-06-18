@@ -17,7 +17,8 @@ import java.util.ArrayList;
 public class TaskCustom extends Task {
     /**
      * subklasse von task
-     * die einzelnen tage, an denen der task gilt, werden als liste gespeichert und können durch diese abgerufen werden
+     * die einzelnen tage, an denen der task gilt
+     * werden als liste gespeichert und können durch diese abgerufen werden
      * @param title
      * @param description
      * @param time

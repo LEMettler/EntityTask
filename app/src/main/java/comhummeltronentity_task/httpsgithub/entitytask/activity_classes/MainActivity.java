@@ -31,11 +31,19 @@ import comhummeltronentity_task.httpsgithub.entitytask.task_classes.TaskWeekly;
 
 /**
 * In diesem Fenster startet die App
- * und man hat die auswahl nach der designvorlage zu kalender oder tasks zu gehen
+ *und man hat die auswahl nach der designvorlage zu kalender oder tasks zu gehen
+ *
+ * *************************
+ * attribute und methoden bitte in englisch halten leude, falls das wer irgendwann mal noch ließt
+ * kommentare zum erklären da passiert, eher nicht zeile für zeile
+ * *************************
+ *
+ *TODO zukünftig kann noch eine notification funktion eingebaut werden, grundlagen sind gelegt (hauptproblem: benötigt einen eigenen backgroundservice)
 * */
 
 public class MainActivity extends AppCompatActivity {
-    
+
+    //**************************Attribute***********************************************************
     private TaskStorage taskStorage;
     private ViewPager viewPager;
 
@@ -45,6 +53,11 @@ public class MainActivity extends AppCompatActivity {
     private TextView txtToday;
     private Animation rotateAnimation;
 
+
+    //****************************onCreate**********************************************************
+    /**
+     * initializieren der xml + erste erzeugung des storage
+     */
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         viewLogo.setClickable(true);
         viewLogo.setOnClickListener(new View.OnClickListener() {
             @Override                                               //click auf logo wechselt ob today sichbar ist
-            public void onClick(View view) {
+            public void onClick(View view) {                                //rotation des logo
                 rotateAnimation = AnimationUtils.loadAnimation(context,R.anim.rotate);
                 viewLogo.startAnimation(rotateAnimation);
                 viewLogo.postDelayed(new Runnable() {
@@ -106,11 +119,35 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        taskStorage.saveProfileToFile(this);
+        taskStorage.saveProfileToFile(this);    //beim schließen nochmal alles speichern
+        taskStorage.saveTasksToFile(this);
         super.onStop();
     }
 
-    //erstellen/erneuern  des viewpager auf basis des heutigen datum
+
+    //****************************viewpager & progressbar*******************************************
+    /**
+     * <lange, schwierige methode die immernoch angstzustände in mir auslöst>
+     *
+     * wir wollen in der main nur die tasks anzeigen, die gerade für diesen spezifischen tag (today)
+     * nicht done sind. Dazu wirden in ner schleife alle tasks durchgegangen und je nach Subtasks
+     * speziell behandelt
+     *
+     * DONE = FALSE
+     * + custom
+     *      - today ist in der datumliste des tasks
+     * + monthly
+     *      - alle datum durchgehen, schauen ob der tag des monats mit dem von today übereinstimmt
+     * + weekly
+     *      -index von today in der woche pullen
+     *      -aus der boolean tagesliste den index abfragen, ob dieser nicht schon done ist
+     *
+     * DONE = TRUE
+     *      wenn der task zwar done ist, nicht heute relevant ist,
+     *      aber in der zukunft nochmal vorkommt, wird er wieder zurückgesetzt
+     *      (für details siehe randcomments der else)
+     *
+     */
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void refreshViewPager() {
 
@@ -144,11 +181,9 @@ public class MainActivity extends AppCompatActivity {
                     if (days[daysIndex]) {
                         selectedTasks.add(t);
                     }
-
                     //DONE anzeige von weekly anhand von days
                 }
-                //todo reset done tasks, after the day
-
+                //DONE reset done tasks, after the day
                 //done = true
             } else{
                 //custom: task expired or set to done=false again?
@@ -185,7 +220,95 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(viewPagerAdapter);
     }
 
-    //Link zu TaskActivity
+    /**
+     * über den viewpager kann der user den button DONE triggern, derr ruft diese methode auf.
+     * der state des tasks wird auf done gesetzt und das wird in einem toast (kleine message)
+     * angezeigt, anschliesend bekommt der user xp auf sein profil hinzuaddiert und dessen anzeige
+     * aktualisiert
+     *
+     * @param selectedTasks
+     * @param position
+     */
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void setTaskDone(ArrayList<Task> selectedTasks, int position){
+        Task t = selectedTasks.get(position);
+        int i = taskStorage.getTasks().indexOf(t);
+
+        taskStorage.setOneTaskState(i, true);
+
+        //toasts sind kleine Einbeldungen, die kurzes Feedback geben
+        Context context = getApplicationContext();
+        CharSequence text = t.getTitle() + " is Done!";
+        int duration = Toast.LENGTH_SHORT;
+
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 250);
+        toast.show();
+        refreshViewPager();
+
+        //xp geben und alles speichern
+        taskStorage.profile.increasePoints(20);
+        taskStorage.saveTasksToFile(this);
+        taskStorage.saveProfileToFile(this);
+        updateProgress(false);
+    }
+
+    /**
+     * animierte aktualisierung der progressbar und des levels
+     *
+     * @param activityChange
+     */
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void updateProgress(Boolean activityChange){
+
+        //beim activitywechsel -> keine animationen
+        if (activityChange) {
+            progressBar.setProgress(taskStorage.profile.getPoints(), true);
+            int level = taskStorage.profile.getLevel();
+            txtLevel.setText(Integer.toString(level));
+        }else {
+
+            float from;
+            float to;
+            if (taskStorage.profile.getPoints() == 0) {
+                from = 100;
+                to = 0;
+            } else {
+                to = taskStorage.profile.getPoints();
+                from = to - 20;
+            }
+            //aufruf der animationsclass
+            ProgressBarAnimation anim = new ProgressBarAnimation(progressBar, from, to);
+            anim.setDuration(1000);
+            progressBar.startAnimation(anim);
+
+            if (from == 100) {
+                //beim level-up einmal rotieren
+                rotateAnimation = AnimationUtils.loadAnimation(MainActivity.this, R.anim.rotate);
+                rotateAnimation.setDuration(1000);
+                txtLevel.startAnimation(rotateAnimation);
+                txtLevel.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        int level = taskStorage.profile.getLevel();
+                        txtLevel.setText(Integer.toString(level));
+                    }
+                }, (rotateAnimation.getDuration() / 2) );    //wait until animation finished
+            }
+        }
+    }
+
+    //****************************Activity-Wechsel**************************************************
+    /**
+     * Activities werden für eine rückgabe aufgerufen,
+     * dabei wird ihnen ein Intent gegeben, dieser dient einfach zur übertragung des taskStroage,
+     * der auch wieder zurück gegeben wird (weil die referenz an ein objekt zwar weitergegeben wird,
+     * aber beim zurückgehen nicht dort aktualisiert wird)
+     *
+     * Den an deise zurückgegebene Storage speichern wir dann wieder
+     * @param view
+     */
+
     public void gotoTasks(View view){
         Intent intent = new Intent(this, TasksActivity.class);
         intent.putExtra("TASKSTORAGE", taskStorage);    //Übergeben des Storage über Intent
@@ -209,70 +332,6 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent, 1);
     }
 
-
-    //der viewpager ruft diese methode auf um einen task zu erledigen
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public void setTaskDone(ArrayList<Task> selectedTasks, int position){
-        Task t = selectedTasks.get(position);
-        int i = taskStorage.getTasks().indexOf(t);
-
-        taskStorage.setOneTaskState(i, true);
-
-        //toasts sind kleine Einbeldungen, die kurzes Feedback geben
-        Context context = getApplicationContext();
-        CharSequence text = t.getTitle() + " is Done!";
-        int duration = Toast.LENGTH_SHORT;
-
-        Toast toast = Toast.makeText(context, text, duration);
-        toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 250);
-        toast.show();
-        refreshViewPager();
-
-        taskStorage.profile.increasePoints(20);
-        taskStorage.saveTasksToFile(this);
-        taskStorage.saveProfileToFile(this);
-        updateProgress(false);
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private void updateProgress(Boolean activityChange){
-        if (activityChange) {
-            progressBar.setProgress(taskStorage.profile.getPoints(), true);
-            int level = taskStorage.profile.getLevel();
-            txtLevel.setText(Integer.toString(level));
-
-        }else {
-
-            float from;
-            float to;
-            if (taskStorage.profile.getPoints() == 0) {
-                from = 100;
-                to = 0;
-            } else {
-                to = taskStorage.profile.getPoints();
-                from = to - 20;
-            }
-
-            ProgressBarAnimation anim = new ProgressBarAnimation(progressBar, from, to);
-            anim.setDuration(1000);
-            progressBar.startAnimation(anim);
-
-            if (from == 100) {
-
-                rotateAnimation = AnimationUtils.loadAnimation(MainActivity.this, R.anim.rotate);
-                rotateAnimation.setDuration(1000);
-                txtLevel.startAnimation(rotateAnimation);
-                txtLevel.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        int level = taskStorage.profile.getLevel();
-                        txtLevel.setText(Integer.toString(level));
-                    }
-                }, (rotateAnimation.getDuration() / 2) );    //wait until animation finished
-            }
-        }
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Check which request we're responding to
@@ -286,4 +345,5 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
 }

@@ -17,7 +17,8 @@ import java.util.ArrayList;
 public class TaskWeekly extends Task {
 
     /**
-     * wöchentliche tasks, ist die ausnahme, denn ein array aus booleans (ein bool = ein tag) gibt an, ob die task an diesem tag gilt oder nicht
+     * wöchentliche tasks, ist die ausnahme, denn ein array aus booleans (ein bool = ein tag) gibt an
+     * ob die task an diesem tag gilt oder nicht
      * @param title
      * @param description
      * @param time

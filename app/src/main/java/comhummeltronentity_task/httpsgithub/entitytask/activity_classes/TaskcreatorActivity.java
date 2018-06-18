@@ -34,18 +34,19 @@ import comhummeltronentity_task.httpsgithub.entitytask.task_classes.TaskWeekly;
 
 /**
 * Hier werden die einzelnen Tasks erzeugt
+ *
+ *
  * DONE tasks löschen/back
  *
  * TODO reminderfunktion in tasks einbauen, ist ne seperate geschichte, wird über solche push notifications geregelt
  * TODO ist eine zeit bereits gewählt sollte diese noch nachträglich änderbar sein
- * TODO gleiches datumano sollte nicht mehrmals ausgewählt werden können;
- * (siehe https://www.youtube.com/watch?v=SWsuijO5NGE)
+ * TODO gleiches datumano sollte nicht mehrmals ausgewählt werden können
+ * (https://www.youtube.com/watch?v=SWsuijO5NGE)
  *DONE wenn kein datum (auch zeit?) ausgewählt, soll der task nicht erstellt werden können
- *
- *
  * vorallem:
  * DONE finde eine passende auswahlmöglichkeit für weekly
  * TODO xml lauyout richtig sortieren und organisierte verankerungen
+ *
  *
  *
  * für die custom und motnhly auswahl gibt es ne sache die heist datepicker, ist n popup ding von google mit einfacher tagesausauswahl
@@ -57,6 +58,7 @@ import comhummeltronentity_task.httpsgithub.entitytask.task_classes.TaskWeekly;
 
 public class TaskcreatorActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
+    //************************Attribute**************************************************************
     private TaskStorage taskStorage = new TaskStorage();
 
     //Attribute für GUI
@@ -74,13 +76,17 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
     private Task preTask;
     private int preIndex;
 
-
     //Attribute zum Date/Time input
     private String inputTime;
     private boolean[] inputDays;
     private String inputYear, inputMonth, inputDay;
     private ArrayList<String> dates = new ArrayList<>();
 
+
+    //************************onCreate**************************************************************
+    /**
+     * initializieren der xml mit calendar + aufnehmen des taskstorage
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,6 +138,13 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
         txtInputTime.setText("-");
     }
 
+
+    //************************datum und zeit auswahl************************************************
+
+    /**
+     * datum und zeitpicker methoden
+     *
+     */
 
     //Methoden der Time/Datepicker
 
@@ -274,9 +287,7 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
             txtInputDate.setText(txtInputDate.getText() + ", " + dates.get(dates.size() - 1));
 
         }
-
     }
-
 
     //nachdem das popup zur datumsasuwahl mit ok bestätigt wurde, wird diese methode aufgerufen, zuerstmal wird das datum abgespeichert (+ überprüfung ob doppelt)
     //wenn es das erste datum ist -> auch time picken
@@ -349,7 +360,10 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
     }
 
 
-    //Erzeugung der Taskobjekte
+    //**********************************************************************************************
+    /**
+     * Erzeugung der Taskobjekte
+     */
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void addTask(View v){
 
