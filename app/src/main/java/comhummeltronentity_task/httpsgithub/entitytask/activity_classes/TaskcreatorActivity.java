@@ -116,31 +116,20 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
             inputDescription.setText(preTask.getDescription());
         }
 
-        //**************************************************************************************************************************************
-        //**************************************************************************************************************************************
-        /**
-         * hier einen alertdialog erstellen, der für die weekly-auswahl einen dialog anzeigt, in dem versch tage ausgewählt werden können
-         * dazu müsst ihr die xml datei "dialog_weeky" in res/layout/ dem dialogbuilder adden etc.
-         * schaut tutorials dazu, was glaubt ihr, warum ich das nicht selbst mache.
-         * den dialog initialisiert ihr in btnPickHandler() und in addTask() soll ein weekly-task erstellt werden und geadded werden (siehe andere tasks)
-         */
-
-
-        //**************************************************************************************************************************************
-        //**************************************************************************************************************************************
     }
 
-    //Handler der Radiobutton -> Anzeige der Time/Date picker
-    public void rbtnCustomHandler(View v){
+    //Handler der Radiobutton -> reset der Time/Date picker bei neuauswahl
+    public void rbtnHandler(View v){
         btnPick.setVisibility(View.VISIBLE);
-    }
+        btnAddDate.setVisibility(View.INVISIBLE);
+        btnSave.setVisibility(View.GONE);
+        inputDay = "";
+        inputMonth = "";
+        inputYear = "";
+        inputTime = "";
 
-    public void rbtnMonthlyHandler(View v){
-        btnPick.setVisibility(View.VISIBLE);
-    }
-
-    public void rbtnWeeklyHandler(View v){      //brauchen wir das noch?
-        btnPick.setVisibility(View.VISIBLE);
+        txtInputDate.setText("-");
+        txtInputTime.setText("-");
     }
 
 
@@ -177,8 +166,6 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
             final CheckBox rbtnSunday = d.findViewById(R.id.checkSunday);
 
 
-
-
             Button btnCancel = d.findViewById(R.id.btnCancel);
             Button btnOK = d.findViewById(R.id.btnOK);
 
@@ -211,11 +198,6 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
             });
             d.show();
 
-            /**
-             * hier den weekly-dialog erstellen
-             *anschließend soll auch ein timepicker erstellt werden (siehe ~ line 169)
-             * die tage (sollten am besten gleich) in einem boolean-array zwischengespeichert werden, um sie dann in addTask() gleich so zu adden
-             */
         }
     }
     //auswahl weiterer datuminen
@@ -294,6 +276,8 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
         }
 
     }
+
+
     //nachdem das popup zur datumsasuwahl mit ok bestätigt wurde, wird diese methode aufgerufen, zuerstmal wird das datum abgespeichert (+ überprüfung ob doppelt)
     //wenn es das erste datum ist -> auch time picken
     @Override
@@ -359,7 +343,7 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
 
         txtInputTime.setText(inputTime);
 
-        btnPick.setVisibility(View.GONE);
+        btnPick.setVisibility(View.INVISIBLE);
         btnAddDate.setVisibility(View.VISIBLE);
         btnSave.setVisibility(View.VISIBLE);
     }
@@ -423,10 +407,6 @@ public class TaskcreatorActivity extends AppCompatActivity implements DatePicker
                 taskStorage.getTasks().set(preIndex, newtask);
                 taskStorage.getTaskState().set(preIndex, false);
             }
-
-            /**
-             * hier die weekly-tasks erstellen und in den taskStorage adden
-             */
         }
 
         //zurück zu taskactivity
