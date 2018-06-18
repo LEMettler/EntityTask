@@ -1,6 +1,6 @@
 # EntityTask
 
-School project.  An Android TaskManager which allows you to manage your own tasks combined with a small xp-system for some small reward tracking. Developed in Android Studio.
+School project.  An Android TaskManager which allows you to manage your own tasks combined with a small xp-system for reward tracking. Developed in Android Studio.
 
 
 
