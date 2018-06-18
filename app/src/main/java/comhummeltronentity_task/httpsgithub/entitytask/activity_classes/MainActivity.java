@@ -21,6 +21,7 @@ import java.util.ArrayList;
 
 import comhummeltronentity_task.httpsgithub.entitytask.R;
 import comhummeltronentity_task.httpsgithub.entitytask.TaskStorage;
+import comhummeltronentity_task.httpsgithub.entitytask.activity_classes.mainactivity_support.ProgressBarAnimation;
 import comhummeltronentity_task.httpsgithub.entitytask.activity_classes.mainactivity_support.ViewPagerAdapter;
 import comhummeltronentity_task.httpsgithub.entitytask.task_classes.Task;
 import comhummeltronentity_task.httpsgithub.entitytask.task_classes.TaskCustom;
@@ -67,14 +68,20 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 rotateAnimation = AnimationUtils.loadAnimation(context,R.anim.rotate);
                 viewLogo.startAnimation(rotateAnimation);
+                viewLogo.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (viewPager.getVisibility() == View.VISIBLE){
+                            viewPager.setVisibility(View.GONE);
+                            txtToday.setVisibility(View.GONE);
+                        }else{
+                            viewPager.setVisibility(View.VISIBLE);
+                            txtToday.setVisibility(View.VISIBLE);
+                        }
+                    }
 
-                if (viewPager.getVisibility() == View.VISIBLE){
-                    viewPager.setVisibility(View.GONE);
-                    txtToday.setVisibility(View.GONE);
-                }else{
-                    viewPager.setVisibility(View.VISIBLE);
-                    txtToday.setVisibility(View.VISIBLE);
-                }
+                }, rotateAnimation.getDuration());    //wait until animation finished
+
             }
         });
 
@@ -88,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
         //level-text
         txtLevel = findViewById(R.id.txtLevel);
         int level = taskStorage.profile.getLevel();
-        txtLevel.setText("Level: " + level);
+        txtLevel.setText(Integer.toString(level));
 
         //erstellung des tasks today viewpager
         viewPager = findViewById(R.id.viewPager);
@@ -224,14 +231,46 @@ public class MainActivity extends AppCompatActivity {
         taskStorage.profile.increasePoints(20);
         taskStorage.saveTasksToFile(this);
         taskStorage.saveProfileToFile(this);
-        updateProgress();
+        updateProgress(false);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void updateProgress(){
-        progressBar.setProgress(taskStorage.profile.getPoints(), true);
-        int level = taskStorage.profile.getLevel();
-        txtLevel.setText("Level: " + level);
+    private void updateProgress(Boolean activityChange){
+        if (activityChange) {
+            progressBar.setProgress(taskStorage.profile.getPoints(), true);
+            int level = taskStorage.profile.getLevel();
+            txtLevel.setText(Integer.toString(level));
+
+        }else {
+
+            float from;
+            float to;
+            if (taskStorage.profile.getPoints() == 0) {
+                from = 100;
+                to = 0;
+            } else {
+                to = taskStorage.profile.getPoints();
+                from = to - 20;
+            }
+
+            ProgressBarAnimation anim = new ProgressBarAnimation(progressBar, from, to);
+            anim.setDuration(1000);
+            progressBar.startAnimation(anim);
+
+            if (from == 100) {
+
+                rotateAnimation = AnimationUtils.loadAnimation(MainActivity.this, R.anim.rotate);
+                rotateAnimation.setDuration(1000);
+                txtLevel.startAnimation(rotateAnimation);
+                txtLevel.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        int level = taskStorage.profile.getLevel();
+                        txtLevel.setText(Integer.toString(level));
+                    }
+                }, (rotateAnimation.getDuration() / 2) );    //wait until animation finished
+            }
+        }
     }
 
     @Override
@@ -243,7 +282,7 @@ public class MainActivity extends AppCompatActivity {
             taskStorage = data.getExtras().getParcelable("TASKSTORAGE");
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 refreshViewPager();
-                updateProgress();
+                updateProgress(true);
             }
         }
     }
