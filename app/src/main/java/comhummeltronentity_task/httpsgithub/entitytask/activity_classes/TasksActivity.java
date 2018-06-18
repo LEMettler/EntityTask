@@ -52,6 +52,22 @@ public class TasksActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
     }
 
+    private void refreshViewPager(ViewPager viewPager, int page){
+
+        SectionsPageAdapter adapter = new SectionsPageAdapter(getSupportFragmentManager());
+
+        for (Task t : taskStorage.getTasks()) {
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("TASK", t);
+            TaskviewFragment fragment = new TaskviewFragment();
+            fragment.setArguments(bundle);
+
+            adapter.addFragment(fragment, t.getTitle());
+        }
+        viewPager.setAdapter(adapter);
+        viewPager.setCurrentItem(page);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -139,8 +155,8 @@ public class TasksActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (!taskStorage.getTasks().isEmpty()) {
-            if (id == R.id.action_delete) {
-                deleteDialog();                         //todo refresh nachdem ein task deletet wurde
+            if (id == R.id.action_delete) {     //je nach ausgewähltem dialog werden verschiedene dialoge angezeigt
+                deleteDialog();
             }else if (id == R.id.action_edit){
                 editDialog();
             }
@@ -163,14 +179,15 @@ public class TasksActivity extends AppCompatActivity {
                         Intent intent = new Intent(context, TaskcreatorActivity.class);
                         intent.putExtra("TASKSTORAGE", taskStorage);                    //übergabe des taskSotrage
                         intent.putExtra("EDITTASK", mViewPager.getCurrentItem());       //übergabe des task-indexes, das geeditet werden soll
-
                         startActivityForResult(intent, 1); //1 == successful
-                        setupViewPager(mViewPager);
+
+                        refreshViewPager(mViewPager, mViewPager.getCurrentItem());
+
                     }
                 }).create().show();
     }
 
-    //todo delete funktioniert noch nicht so 100%, geliches prob, wie edit
+    //todo delete funktioniert noch nicht 100%, siehe github
     //erstellt einen dialog zum deleten des tasks X
     private void deleteDialog(){
         final Context context = this;
@@ -184,11 +201,14 @@ public class TasksActivity extends AppCompatActivity {
                         int index = mViewPager.getCurrentItem();
                         taskStorage.removeOneTask(index);
                         taskStorage.saveTasksToFile(context);
-                        setupViewPager(mViewPager);
+
+                        refreshViewPager(mViewPager, mViewPager.getCurrentItem());
                     }
                 }).create().show();
     }
 
+
+    //<ignore>
     @Override
     protected void onStop() {
         taskStorage.saveProfileToFile(this);
